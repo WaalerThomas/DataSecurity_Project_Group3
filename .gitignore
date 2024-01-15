@@ -1,0 +1,7 @@
+.DS_Store
+.idea
+*.log
+tmp/
+
+app/config.php
+*_password.txt

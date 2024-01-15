@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  php-apache:
+    ports:
+      - "80:80"
+    build: './build/php'
+    volumes:
+      - ./app:/var/www/html
+  mysql:
+    secrets:
+      - db_root_password
+      - db_someuser_password
+    ports:
+      - "3306:3306"
+    build: './build/mysql'
+    environment:
+      MYSQL_USER: someuser
+      MYSQL_DATABASE: "my-wonderful-website"
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_PASSWORD_FILE: /run/secrets/db_someuser_password
+    volumes:
+      - dbData:/var/lib/mysql
+
+volumes:
+  app:
+  dbData:
+
+secrets:
+  db_root_password:
+    file: db_root_password.txt
+  db_someuser_password:
+    file: db_someuser_password.txt
