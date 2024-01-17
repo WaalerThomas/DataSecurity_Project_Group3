@@ -16,7 +16,7 @@ services:
     build: './build/mysql'
     environment:
       MYSQL_USER: someuser
-      MYSQL_DATABASE: "my-wonderful-website"
+      MYSQL_DATABASE: "datasec_db"
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_PASSWORD_FILE: /run/secrets/db_someuser_password
     volumes:

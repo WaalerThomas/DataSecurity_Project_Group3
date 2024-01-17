@@ -2,4 +2,4 @@
 define("DB_HOST", "mysql");
 define("DB_USERNAME", "");
 define("DB_PASSWORD", "");
-define("DB_DATABASE_NAME", "");
+define("DB_DATABASE_NAME", "datasec_db");
