@@ -11,7 +11,7 @@ Andre ressurser som kan være nyttig:
 ### Oppsett
 1. I rot-mappen til prosjektet, der docker-compose.yml befinner seg, opprett to filer; *db_root_password.txt*, *db_someuser_password.txt*. I de respektive filene legges inn passordet.
 2. Kjør `docker-compose up -d` i kommandovindu i rot-mappen til prosjektet. Dette vil lage og starte opp mysql og apache serveren.
-3. Naviger til mappen /app/. Lag en kopi av *config.php.example* og fjern *.example* fra filnavnet.
+3. Naviger til mappen /app/inc/. Lag en kopi av *config.php.example* og fjern *.example* fra filnavnet.
 4. Rediger *config.php* og legg til respektiv informasjon på variablene.
 5. I nettleseren, åpne opp *localhost:80*.
 
