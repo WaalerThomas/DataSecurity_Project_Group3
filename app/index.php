@@ -1,16 +1,16 @@
 <?php
-
-require 'config.php';
+require __DIR__ . "/inc/bootstrap.php";
 
 $host = "mysql";
+$dbname = "my-wonderful-website";
 $charset = "utf8";
 $port = "3306";
 
 try {
     $pdo = new PDO(
-        dsn: "mysql:host=$host;dbname=$DB_NAME;charset=$charset;port=$port",
+        dsn: "mysql:host=$host;dbname=$dbname;charset=$charset;port=$port",
         username: "someuser",
-        password: "$DB_PASSWORD"
+        password: DB_PASSWORD
     );
 
     $persons = $pdo->query("SELECT * FROM Persons");
