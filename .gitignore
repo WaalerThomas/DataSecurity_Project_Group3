@@ -3,5 +3,5 @@
 *.log
 tmp/
 
-app/config.php
+app/inc/config.php
 *_password.txt

@@ -1,6 +1,8 @@
 # DataSecurity_Project_Group3
-
 Brukte følgende tutorial til å sette dette opp: https://doc4dev.com/en/create-a-web-site-php-apache-mysql-in-5-minutes-with-docker/
+
+Andre ressurser som kan være nyttig:
+- https://code.tutsplus.com/how-to-build-a-simple-rest-api-in-php--cms-37000t
 
 ## Utvikling
 ### Krav
