@@ -1,3 +1,8 @@
+<?php
+// Start the session to be able to access $_SESSION.
+session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -105,41 +110,49 @@ body {
 }
 </style>
 
+<?php
+$displayName = "";
 
+if (! empty($_SESSION["userId"])) {
+  require_once __DIR__ . "/class/User.php";
+  $user = new User();
+  $userResult = $user->getUserById($_SESSION["userId"]);
+
+  $displayName = $userResult[0]["first_name"];
+}
+?>
 
 <div class="header">
-  <a href="registrer.php" >Registrer</a>
-  <a href="login.php">Logg inn</a>
+  <?php
+  if (! empty($displayName)) {
+  ?>
+    <span><?php echo $displayName; ?></span>
+    <a href="logout.php">Logg ut</a>
+  <?php
+  } else {
+  ?>
+    <a href="registrer.php" >Registrer</a>
+    <a href="login.php">Logg inn</a>
+  <?php
+  }
+  ?>
 </div>
-
-<div1>
-
-
-
-</div1>
-
 
 <div class="row">
   <div class="column middle">
     <h2>Main Content</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat, purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan convallis.</p>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat, purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan convallis.</p>
-    <?php 
-        echo $_POST["pin"]
-    ?>
-
-    </div>
+  </div>
   
   <div class="column side">
     <h2>Emnesøk</h2>
-    <?php /*<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit..</p>*/?>
-    <form action="?" method="post"><?php /* class="emneinput"*/?>
-        <?php /*<label >Emnekode input</label> <br> style="position:absolute; left: 40%;"*/?>
-        <label>Emnekode:</label>
-        <input type="text" id="emnekode" name="emnekode" required><br><br>
-        <label>PIN-kode:</label>
-        <input type="password" id="pin" name="pin" required><br><br>
-    <input type="submit" value="Submit">
+    <form action="?" method="post">
+      <label>Emnekode:</label>
+      <input type="text" id="emnekode" name="emnekode" required><br><br>
+      <label>PIN-kode:</label>
+      <input type="password" id="pin" name="pin" required><br><br>
+      <input type="submit" value="Submit">
     </form>
   </div>
 </div>
@@ -147,9 +160,7 @@ body {
 <?php 
 /* Note: Validate "emnekode" with pin and so on */
 /* Note: generate the said "emne" in "column middle" */
-
 ?>
-
 
 </body>
 </html>

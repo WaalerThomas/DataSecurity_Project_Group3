@@ -1,3 +1,8 @@
+<?php
+// Start the session to be able to access $_SESSION.
+session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,28 +10,32 @@
 </head>
 <body>
 
-
-<form action="?" method="post"><?php /* class="emneinput"*/?>
-    <label>E-mail:</label>
-    <input type="email" id="email" name="email" required><br><br>
-    <label>Passord:</label>
-    <input type="password" id="passord" name="passord" required><br><br>
-<input type="submit" value="Submit">
-</form>
-<br>
-<a href="glemt_passord.php">Glemt passord?</a>
-
 <?php
+if (isset($_SESSION["errorMessage"])) {
+?>
+    <div><?php  echo $_SESSION["errorMessage"]; ?></div>
+<?php
+    unset($_SESSION["errorMessage"]);
+}
+
 if ($_SERVER["REQUEST_METHOD"] != "POST") { 
-    exit;
 }
 
 /* Note: validate user through database */
 /* Note: redirect to student/lecturer style main page */
 ?>
 
+<form action="login-action.php" method="post">
+    <label>E-mail:</label>
+    <input type="email" id="email" name="email" required><br><br>
+    <label>Passord:</label>
+    <input type="password" id="password" name="password" required><br><br>
+    <input type="submit" name="login" value="Submit">
+</form>
 
+<br>
 
+<a href="glemt_passord.php">Glemt passord?</a>
 
 </body>
 </html>

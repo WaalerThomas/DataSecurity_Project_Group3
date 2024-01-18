@@ -19,3 +19,22 @@ Andre ressurser som kan være nyttig:
 Dersom du ikke bruker docker desktop så kan du kjøre følgende til å koble til kommandovinduet til serverne. Merk at det er oppretter to docker containere, én for mysql og én for apache.
 1. Finn liste over navnet til docker container ved å skrive inn `docker ps -a` i kommandovinduet.
 2. Koble til ved å skrive inn `docker exec -ti <docker_container_name> /bin/bash` i kommandovinduet, hvor *<docker_container_name> er enten; *datasecurity_project_group3_mysql_1* eller *datasecurity_project_group3_php-apache_1*.
+
+### For testing av innlogging
+Lagde en test tabell i databasen for å teste logikken for å logge seg inn.
+For å logge inn med den brukeren så blir det:
+email: kate@wince.com
+pass: kate@03
+```sql
+CREATE TABLE `users` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `first_name` varchar(255) NOT NULL,
+    `last_name` varchar(255) NOT NULL,
+    `password` varchar(255) NOT NULL,
+    `email` varchar(255) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+INSERT INTO `users` (first_name, last_name, password, email) VALUES
+('Kate', 'Winslet', '$2y$10$KCnWnR6bMLDnFxx65lRtgexA6EbeZ.M4yrmiB61yZ8RMVGQTpYQLS', 'kate@wince.com');
+```
