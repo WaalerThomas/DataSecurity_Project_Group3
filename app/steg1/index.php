@@ -31,17 +31,6 @@ session_start();
   cursor: pointer;
 }
 
-/*div {
-  padding: 10px 40px;
-  text-align: right;
-  text-decoration: none;
-  display: inline-block;
-  margin: 4px 2px;
-  cursor: pointer;
-  position: absolute;
-  left: 90%;
-}*/
-
 div1 {
   padding: 10px 40px;
   text-align: right;
@@ -85,15 +74,12 @@ body {
   float: left;
   padding: 10px;
 }
-
 .column.side {
   width: 25%;
 }
-
 .column.middle {
   width: 75%;
 }
-
 .column.full {
   width: 100%;
 }
