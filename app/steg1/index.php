@@ -70,6 +70,14 @@ body {
   color: black;
 }
 
+.header span {
+  color: white;
+  display: block;
+  float: left;
+  text-align: center;
+  padding: 14px 16px;
+}
+
 .column {
   float: left;
   padding: 10px;
@@ -112,7 +120,7 @@ if (! empty($_SESSION["userId"])) {
   <?php
   if (! empty($displayName)) {
   ?>
-    <span><?php echo $displayName; ?></span>
+    <span><?php echo $displayName . " - Student|Foreleser"; ?></span>
     <a href="logout.php">Logg ut</a>
   <?php
   } else {

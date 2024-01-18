@@ -15,18 +15,15 @@ session_start();
         top: 50%;
         transform: translate(-50%,-50%);
     }
+
+    .error_msg {
+        color: red;
+    }
 </style>
 </head>
 <body>
 
 <?php
-if (isset($_SESSION["errorMessage"])) {
-?>
-    <div><?php  echo $_SESSION["errorMessage"]; ?></div>
-<?php
-    unset($_SESSION["errorMessage"]);
-}
-
 if ($_SERVER["REQUEST_METHOD"] != "POST") { 
 }
 
@@ -35,6 +32,15 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
 ?>
 
 <div class="login_form">
+    <?php
+    if (isset($_SESSION["errorMessage"])) {
+    ?>
+        <div class="error_msg"><?php  echo $_SESSION["errorMessage"]; ?></div>
+    <?php
+        unset($_SESSION["errorMessage"]);
+    }
+    ?>
+
     <form action="login-action.php" method="post">
         <label>E-mail:</label>
         <input type="email" id="email" name="email" required><br><br>
