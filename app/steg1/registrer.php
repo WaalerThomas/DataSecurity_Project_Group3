@@ -1,33 +1,50 @@
+<?php
+// Start the session to be able to access $_SESSION.
+session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
 <title>Registrering</title>
+<style>
+    .reg_form {
+        display: inline-block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+    }
+
+    .error_msg {
+        color: red;
+    }
+</style>
 </head>
 <body>
 
-<form action="?" method="post"><?php /* class="emneinput"*/?>
-    <label>Fullt navn:</label>
-    <input type="text" id="navn" name="navn" required><br><br>
-    <label>E-post:</label>
-    <input type="email" id="epost" name="epost" required><br><br>
-    <label>Passord:</label>
-    <input type="password" id="passord" name="passord" required><br><br>
-    <label>Skriv Passord igjen:</label>
-    <input type="password" id="rep_passord" name="rep_passord" required><br><br>
-<input type="submit" value="Submit">
-</form>
-
-<?php 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if($_POST["passord"] == $_POST["rep_passord"]) {
-        echo "happy :)"; 
-        /* Note: Insert database query here*/ 
+<div class="reg_form">
+    <?php
+    if (isset($_SESSION["errorMessage"])) {
+    ?>
+        <div class="error_msg"><?php  echo $_SESSION["errorMessage"]; ?></div>
+    <?php
+        unset($_SESSION["errorMessage"]);
     }
-    else
-        echo "Passordene var ikke like...";
-}
+    ?>
 
-?>
+    <form action="registrer-action.php" method="post">
+        <label>Fullt navn:</label>
+        <input type="text" id="full_name" name="full_name" required><br><br>
+        <label>E-post:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        <label>Passord:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <label>Skriv Passord igjen:</label>
+        <input type="password" id="rep_password" name="rep_password" required><br><br>
+        <input type="submit" value="Submit" name="register_user">
+    </form>
+</div>
 
 </body>
 </html>
