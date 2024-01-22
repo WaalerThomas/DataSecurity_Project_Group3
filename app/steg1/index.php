@@ -203,20 +203,16 @@ if (! empty($_SESSION["userId"])) {
         <h3 class="teachername">Emneansvarlig</h3>
       </aside>
     </div>
-    <?php 
-        echo $_POST["pin"]
-    ?>
-
-    </div>
+  </div>
   
   <div class="column side">
     <h2>Emnesøk</h2>
-    <form action="?" method="post">
+    <form action="subject-action.php" method="post">
       <label>Emnekode:</label>
       <input type="text" id="emnekode" name="emnekode" required><br><br>
       <label>PIN-kode:</label>
       <input type="password" id="pin" name="pin" required><br><br>
-      <input type="submit" value="Submit">
+      <input type="submit" value="Submit" name="subject-search">
     </form>
   </div>
 </div>
