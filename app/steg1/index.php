@@ -102,6 +102,51 @@ body {
   position: absolute;
   top: 80%;
 }
+
+.commentsection{
+  border: 1px solid black;
+  width: 70%;
+}
+
+.username-comment{
+  font-weight: bold; 
+  color: grey;
+  margin-left: 1rem;
+  border-bottom: 1px solid black;
+  width: 100px;
+}
+
+.username-answer{
+  font-weight: bold; 
+  color: black;
+  margin-left: 2.5rem;
+  border-bottom: 1px solid black;
+  width: 100px;
+}
+
+.comment{
+  margin-left: 1rem;
+}
+
+.answer{
+  margin-left: 2.5rem;
+}
+
+.emneinfo{
+  display: flex;
+  gap: 1rem;
+}
+
+.info{
+  display: flex;
+  gap: 10px;
+}
+
+.teachername{
+  font-size: 15px;
+  padding-top: .5rem;
+  margin: 0;
+}
 </style>
 
 <?php
@@ -135,9 +180,34 @@ if (! empty($_SESSION["userId"])) {
 <div class="row">
   <div class="column middle">
     <h2>Main Content</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat, purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan convallis.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat, purus leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan convallis.</p>
-  </div>
+    <section class="emneinfo">
+      <h3>Emnekode</h3>
+      <h3>Emnenavn</h3>
+    </section>
+    <div class="info">
+      <div class="commentsection">
+        <div class="comment-info">
+          <p class="username-comment">username</p>
+          <p class="comment">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+       </div>
+       <div class="comment-answer">
+           <p class="username-answer">username</p>
+        <p class="answer">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, 
+          similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+       </div>
+      </div>
+    
+      <aside class="emneansvarlig">
+        <img src="https://placehold.co/100x100.png"></img>
+        <h3 class="teachername">Emneansvarlig</h3>
+      </aside>
+    </div>
+    <?php 
+        echo $_POST["pin"]
+    ?>
+
+    </div>
   
   <div class="column side">
     <h2>Emnesøk</h2>
