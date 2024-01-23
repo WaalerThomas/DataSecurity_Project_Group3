@@ -11,147 +11,120 @@ session_start();
 <body>
 
 <style>
-.button {
-  padding: 6px 18px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 15px;
-  margin: 4px 2px;
-  cursor: pointer;
-}
+  * {
+    box-sizing: border-box;
+  }
 
-.button1 {  
-  padding: 6px 18px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 15px;
-  margin: 4px 2px;
-  cursor: pointer;
-}
+  body {
+    margin: 0;
+  }
 
-div1 {
-  padding: 10px 40px;
-  text-align: right;
-  text-decoration: none;
-  display: inline-block;
-  /*margin: 4px 2px;*/
-  cursor: pointer;
-  position: absolute;
-  left: 40%;
-  top: 50%;
-}
+  .header {
+    overflow: hidden;
+    background-color: #333;
+  }
 
-* {
-  box-sizing: border-box;
-}
+  .header a {
+    float: right;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
 
-body {
-  margin: 0;
-}
+  .header a:hover {
+    background-color: #ddd;
+    color: black;
+  }
 
-.header {
-  overflow: hidden;
-  background-color: #333;
-}
+  .header span {
+    color: white;
+    display: block;
+    float: left;
+    text-align: center;
+    padding: 14px 16px;
+  }
 
-.header a {
-  float: right;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
+  .column {
+    float: left;
+    padding: 10px;
+  }
+  .column.side {
+    width: 25%;
+  }
+  .column.middle {
+    width: 75%;
+  }
+  .column.full {
+    width: 100%;
+  }
 
-.header a:hover {
-  background-color: #ddd;
-  color: black;
-}
+  .row::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
 
-.header span {
-  color: white;
-  display: block;
-  float: left;
-  text-align: center;
-  padding: 14px 16px;
-}
+  .emneinput {
+    position: absolute;
+    top: 80%;
+  }
 
-.column {
-  float: left;
-  padding: 10px;
-}
-.column.side {
-  width: 25%;
-}
-.column.middle {
-  width: 75%;
-}
-.column.full {
-  width: 100%;
-}
+  .commentsection{
+    border: 1px solid black;
+    width: 70%;
+  }
 
-.row::after {
-  content: "";
-  display: table;
-  clear: both;
-}
+  .username-comment{
+    font-weight: bold; 
+    color: grey;
+    margin-left: 1rem;
+    border-bottom: 1px solid black;
+    width: 100px;
+  }
 
-.emneinput {
-  position: absolute;
-  top: 80%;
-}
+  .username-answer{
+    font-weight: bold; 
+    color: black;
+    margin-left: 2.5rem;
+    border-bottom: 1px solid black;
+    width: 100px;
+  }
 
-.commentsection{
-  border: 1px solid black;
-  width: 70%;
-}
+  .comment{
+    margin-left: 1rem;
+  }
 
-.username-comment{
-  font-weight: bold; 
-  color: grey;
-  margin-left: 1rem;
-  border-bottom: 1px solid black;
-  width: 100px;
-}
+  .answer{
+    margin-left: 2.5rem;
+  }
 
-.username-answer{
-  font-weight: bold; 
-  color: black;
-  margin-left: 2.5rem;
-  border-bottom: 1px solid black;
-  width: 100px;
-}
+  .emneinfo{
+    display: flex;
+    gap: 1rem;
+  }
 
-.comment{
-  margin-left: 1rem;
-}
+  .info{
+    display: flex;
+    gap: 10px;
+  }
 
-.answer{
-  margin-left: 2.5rem;
-}
+  .teachername{
+    font-size: 15px;
+    padding-top: .5rem;
+    margin: 0;
+  }
 
-.emneinfo{
-  display: flex;
-  gap: 1rem;
-}
-
-.info{
-  display: flex;
-  gap: 10px;
-}
-
-.teachername{
-  font-size: 15px;
-  padding-top: .5rem;
-  margin: 0;
-}
+  .error_msg {
+    color: red;
+  }
 </style>
 
 <?php
 $displayName = "";
 
+// Populate "global" variables if someone is logged in
 if (! empty($_SESSION["userId"])) {
   require_once __DIR__ . "/class/User.php";
   $user = new User();
@@ -165,8 +138,9 @@ if (! empty($_SESSION["userId"])) {
   <?php
   if (! empty($displayName)) {
   ?>
-    <span><?php echo $displayName . " - Student|Foreleser"; ?></span>
+    <span><?php echo $displayName . " - Student | Foreleser"; ?></span>
     <a href="logout.php">Logg ut</a>
+    <a href="bytte_passord.php">Bytte passord</a>
   <?php
   } else {
   ?>
@@ -207,20 +181,24 @@ if (! empty($_SESSION["userId"])) {
   
   <div class="column side">
     <h2>Emnesøk</h2>
+    <?php
+    // Display error produced from the action script on the form
+    if (isset($_SESSION["errorMessage"])) {
+    ?>
+        <div class="error_msg"><?php  echo $_SESSION["errorMessage"]; ?></div>
+    <?php
+        unset($_SESSION["errorMessage"]);
+    }
+    ?>
     <form action="subject-action.php" method="post">
       <label>Emnekode:</label>
       <input type="text" id="emnekode" name="emnekode" required><br><br>
       <label>PIN-kode:</label>
       <input type="password" id="pin" name="pin" required><br><br>
-      <input type="submit" value="Submit" name="subject-search">
+      <input type="submit" value="submit" name="subject-search">
     </form>
   </div>
 </div>
-
-<?php 
-/* Note: Validate "emnekode" with pin and so on */
-/* Note: generate the said "emne" in "column middle" */
-?>
 
 </body>
 </html>

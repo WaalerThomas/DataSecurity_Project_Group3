@@ -23,14 +23,6 @@ session_start();
 </head>
 <body>
 
-<?php
-if ($_SERVER["REQUEST_METHOD"] != "POST") { 
-}
-
-/* Note: validate user through database */
-/* Note: redirect to student/lecturer style main page */
-?>
-
 <div class="login_form">
     <?php
     if (isset($_SESSION["errorMessage"])) {
@@ -46,17 +38,13 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
         <input type="email" id="email" name="email" required><br><br>
         <label>Passord:</label>
         <input type="password" id="password" name="password" required><br><br>
-        <input type="submit" name="login" value="Submit">
+        <input type="submit" name="login" value="submit">
     </form>
 
     <br>
 
     <a href="glemt_passord.php">Glemt passord?</a>
 </div>
-
-
-
-
 
 </body>
 </html>

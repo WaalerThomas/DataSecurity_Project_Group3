@@ -1,6 +1,8 @@
 <?php
-// TODO: Implemented this part
+/* Note: Validate "emnekode" with pin and so on */
+/* Note: generate the said "emne" in "column middle" */
 
-header("Location: index.php");
-exit;
+session_start();
+$_SESSION["errorMessage"] = "AAAAAAAHHHHH Not implemented yet ;)";
+header("Location: ./");
 ?>

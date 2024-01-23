@@ -13,6 +13,6 @@ if (! empty($_POST["login"])) {
         header("Location: login.php");
         exit;
     }
-    header("Location: index.php");
+    header("Location: ./");
 }
 ?>
