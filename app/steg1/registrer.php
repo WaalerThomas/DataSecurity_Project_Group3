@@ -87,7 +87,7 @@ session_start();
     <h1 style="text-align: center;">Registrer</h1>
 
     <?php
-    if (isset($_SESSION["errorMessage"])) {
+    if (isset($_SESSION["errorMessage"]) && !empty($_SESSION["errorMessage"])) {
     ?>
         <div class="error_msg"><?php  echo $_SESSION["errorMessage"]; ?></div>
     <?php
