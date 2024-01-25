@@ -28,9 +28,6 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
         exit;
     }
 
-    header("Location: registrer.php");
-    exit;
-
     require_once __DIR__ . "/class/User.php";
     $user = new User();
     $isCreated = $user->createUser();
