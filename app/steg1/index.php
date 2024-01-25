@@ -153,7 +153,6 @@ if (! empty($_SESSION["userId"])) {
 
 <div class="row">
   <div class="column middle">
-    <h2>Main Content</h2>
     <section class="emneinfo">
       <h3>Emnekode</h3>
       <h3>Emnenavn</h3>
@@ -161,7 +160,7 @@ if (! empty($_SESSION["userId"])) {
     <div class="info">
       <div class="commentsection">
         <div class="comment-info">
-          <p class="username-comment">username</p>
+          <p class="username-comment">Spørsmål</p>
           <p class="comment">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
        </div>
