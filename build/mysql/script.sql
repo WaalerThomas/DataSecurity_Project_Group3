@@ -108,8 +108,8 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `datasec_db`;
-INSERT INTO `courses` (`idcourses`, `name`, `users_iduser`) VALUES (1, 'Ingeniørfag, data', DEFAULT);
-INSERT INTO `courses` (`idcourses`, `name`, `users_iduser`) VALUES (2, 'Informasjonssystemer', DEFAULT);
+-- INSERT INTO `courses` (`idcourses`, `name`, `users_iduser`) VALUES (1, 'Ingeniørfag, data', DEFAULT);
+-- INSERT INTO `courses` (`idcourses`, `name`, `users_iduser`) VALUES (2, 'Informasjonssystemer', DEFAULT);
 
 COMMIT;
 
@@ -131,7 +131,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `datasec_db`;
-INSERT INTO `users` (`iduser`, `first_name`, `last_name`, `password`, `email`, `picture`, `user_type_iduser_type`) VALUES (1, 'Tobias', 'Sommervold', DEFAULT, 'tobiasws@hiof.no', NULL, DEFAULT);
+-- INSERT INTO `users` (`iduser`, `first_name`, `last_name`, `password`, `email`, `picture`, `user_type_iduser_type`) VALUES (1, 'Tobias', 'Sommervold', DEFAULT, 'tobiasws@hiof.no', NULL, DEFAULT);
 
 COMMIT;
 
