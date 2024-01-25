@@ -56,7 +56,6 @@ class DataSource
      * @return int
      */
     public function insert($query, $paramType, $paramArray) {
-        print $query;   // TODO: Check if this print is necessary. Don't know where it prints
         $stmt = $this->conn->prepare($query);
         $this->bindQueryParams($stmt, $paramType, $paramArray);
         $stmt->execute();

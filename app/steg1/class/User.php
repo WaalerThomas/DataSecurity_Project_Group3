@@ -31,10 +31,20 @@ class User
     }
 
     function getUserTypeByName($typeName) {
-        $query = "SELECT iduser_type FROM user_type WHERE name = ?";
+        $query = "SELECT * FROM user_type WHERE name = ?";
         $paramType = "s";
         $paramArray = array(
             $typeName
+        );
+        $userResult = $this->ds->select($query, $paramType, $paramArray);
+        return $userResult;
+    }
+
+    function getUserTypeById($typeId) {
+        $query = "SELECT * FROM user_type WHERE iduser_type = ?";
+        $paramType = "i";
+        $paramArray = array(
+            $typeId
         );
         $userResult = $this->ds->select($query, $paramType, $paramArray);
         return $userResult;

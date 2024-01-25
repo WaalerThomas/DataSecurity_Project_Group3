@@ -123,6 +123,7 @@ session_start();
 
 <?php
 $displayName = "";
+$userType = "";
 
 // Populate "global" variables if someone is logged in
 if (! empty($_SESSION["userId"])) {
@@ -131,14 +132,21 @@ if (! empty($_SESSION["userId"])) {
   $userResult = $user->getUserById($_SESSION["userId"]);
 
   $displayName = $userResult[0]["first_name"];
+
+  $userTypeResult = $user->getUserTypeById($userResult[0]["user_type_iduser_type"]);
+  if ($userTypeResult[0]["name"] == "student") {
+    $userType = "Student";
+  } else if ($userTypeResult[0]["name"] == "lecturer") {
+    $userType = "Foreleser";
+  }
 }
 ?>
 
 <div class="header">
   <?php
-  if (! empty($displayName)) {
+  if (! empty($displayName) && !empty($userType)) {
   ?>
-    <span><?php echo $displayName . " - Student | Foreleser"; ?></span>
+    <span><?php echo $displayName . " - " . $userType; ?></span>
     <a href="logout.php">Logg ut</a>
     <a href="bytte_passord.php">Bytte passord</a>
   <?php
