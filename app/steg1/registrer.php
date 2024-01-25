@@ -19,6 +19,37 @@ session_start();
     .error_msg {
         color: red;
     }
+
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+    .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 17px;
+    }
+    .tab button:hover {
+        background-color: #ddd;
+    }
+
+    .tab button.active {
+        background-color: #ccc;
+    }
+
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
 </style>
 </head>
 <body>
@@ -31,54 +62,65 @@ session_start();
     <?php
         unset($_SESSION["errorMessage"]);
     }
-
-    $a = '1';
-    $b = '2';
-
-    echo '<a href="registrer.php?type=' . $a . '">Student</a>';
-    echo ' ';
-    echo '<a href="registrer.php?type=' . $b . '">Foreleser</a>';
-
-
-    if(isset($_GET['type'])) {
-        if($_GET['type'] == '1') {
-            echo '<form action="registrer-action.php" method="post">';
-            echo '<label>Fullt navn:</label>';
-            echo '<input type="text" id="full_name" name="full_name" required><br><br>';
-            echo '<label>E-post:</label>';
-            echo '<input type="email" id="email" name="email" required><br><br>';
-            echo '<label>Passord:</label>';
-            echo '<input type="password" id="password" name="password" required><br><br>';
-            echo '<label>Skriv Passord igjen:</label>';
-            echo '<input type="password" id="rep_password" name="rep_password" required><br><br>';
-            echo '<input type="submit" value="Submit" name="registrer_student">';
-            echo '</form>';
-        }
-        else {
-            echo '<form action="registrer-action.php" method="post">';
-            echo '<label>Fullt navn:</label>';
-            echo '<input type="text" id="full_name" name="full_name" required><br><br>';
-            echo '<label>E-post:</label>';
-            echo '<input type="email" id="email" name="email" required><br><br>';
-            echo '<label>Passord:</label>';
-            echo '<input type="password" id="password" name="password" required><br><br>';
-            echo '<label>Skriv Passord igjen:</label>';
-            echo '<input type="password" id="rep_password" name="rep_password" required><br><br>';
-            echo '<label>Emnekode:</label>';
-            echo '<input type="text" id="emnekode" name="emnekode" required><br><br>';
-            echo '<label>Emnepin:</label>';
-            echo '<input type="text" id="emnepin" name="emnepin" required><br><br>';
-            echo '<label>Profilbilde: </label>';
-            echo '<input type="file" name="fileToUpload" id="fileToUpload">';
-            echo '<br><br>';
-            echo '<input type="submit" value="Submit" name="registrer_foreleser">';
-            echo '</form>';
-        }
-
-    }
     ?>
 
-    
+    <h1 style="text-align: center;">Registrer</h1>
+
+    <div class="tab">
+        <button class="tablinks active" onclick="openTab(event, 'student')">Student</button>
+        <button class="tablinks" onclick="openTab(event, 'foreleser')">Foreleser</button>
+    </div>
+
+    <div id="student" class="tabcontent" style="display: block">
+        <form action="registrer-action.php" method="post">
+            <label>Fullt navn:</label>
+            <input type="text" id="full_name" name="full_name" required><br><br>
+            <label>E-post:</label>
+            <input type="email" id="email" name="email" required><br><br>
+            <label>Passord:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <label>Skriv Passord igjen:</label>
+            <input type="password" id="rep_password" name="rep_password" required><br><br>
+            <input type="submit" value="Submit" name="registrer_student">
+        </form>
+    </div>
+
+    <div id="foreleser" class="tabcontent">
+        <form action="registrer-action.php" method="post">
+            <label>Fullt navn:</label>
+            <input type="text" id="full_name" name="full_name" required><br><br>
+            <label>E-post:</label>
+            <input type="email" id="email" name="email" required><br><br>
+            <label>Passord:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <label>Skriv Passord igjen:</label>
+            <input type="password" id="rep_password" name="rep_password" required><br><br>
+            <label>Emnekode:</label>
+            <input type="text" id="emnekode" name="emnekode" required><br><br>
+            <label>Emnepin:</label>
+            <input type="text" id="emnepin" name="emnepin" required><br><br>
+            <label>Profilbilde: </label>
+            <input type="file" name="fileToUpload" id="fileToUpload">
+            <br><br>
+            <input type="submit" value="Submit" name="registrer_foreleser">
+        </form>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
 </div>
 
 </body>
