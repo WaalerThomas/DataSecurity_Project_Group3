@@ -9,7 +9,7 @@ if (! empty($_POST["login"])) {
     $user = new User();
     $isLoggedIn = $user->loginUser();
     if (! $isLoggedIn) {
-        $_SESSION["errorMessage"] = "Invalid Credentials";
+        $_SESSION["errorMessage"] = "Ugyldig Påloggingsinformasjon";
         header("Location: login.php");
         exit;
     }
