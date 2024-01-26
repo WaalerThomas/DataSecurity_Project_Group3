@@ -1,6 +1,11 @@
 <?php
 // Start the session to be able to access $_SESSION.
 session_start();
+
+if (! isset($_GET["type"])) {
+    header("Location: registrer.php?type=0");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -35,6 +40,31 @@ session_start();
         background-color: #f1f1f1;
     }
 
+    .tab a {
+        -webkit-appearance: button;
+        -moz-appearance: button;
+        appearance: button;
+
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 17px;
+
+        text-decoration: none;
+        color: initial;
+    }
+    .tab a:hover {
+        background-color: #ddd;
+    }
+
+    .tab a.active {
+        background-color: #ccc;
+    }
+
     .tab button {
         background-color: inherit;
         float: left;
@@ -54,7 +84,7 @@ session_start();
     }
 
     .tabcontent {
-        display: none;
+        display: block;
         padding: 6px 12px;
         border: 1px solid #ccc;
         border-top: none;
@@ -93,51 +123,61 @@ session_start();
     <?php
         unset($_SESSION["errorMessage"]);
     }
+
+    # <button class="tablinks active" onclick="openTab(event, 'student')">Student</button>
     ?>
 
     <div class="tab">
-        <button class="tablinks active" onclick="openTab(event, 'student')">Student</button>
-        <button class="tablinks" onclick="openTab(event, 'foreleser')">Foreleser</button>
+        <a <?php if ($_GET["type"] == "0") { echo 'class="active"'; } ?> href="?type=0">Student</a>
+        <a <?php if ($_GET["type"] == "1") { echo 'class="active"'; } ?> href="?type=1">Foreleser</a>
     </div>
 
-    <div id="student" class="tabcontent" style="display: block">
-        <form action="registrer-action.php" method="post" class="customForm">
-            <label>Fornavn:</label>
-            <input type="text" id="first_name" name="first_name" required><br><br>
-            <label>Etternavn:</label>
-            <input type="text" id="last_name" name="last_name" required><br><br>
-            <label>E-post:</label>
-            <input type="email" id="email" name="email" required><br><br>
-            <label>Passord:</label>
-            <input type="password" id="password" name="password" required><br><br>
-            <label>Skriv Passord igjen:</label>
-            <input type="password" id="rep_password" name="rep_password" required><br><br>
-            <input type="submit" value="Submit" name="registrer_student">
-        </form>
-    </div>
-
-    <div id="foreleser" class="tabcontent">
-        <form action="registrer-action.php" method="post" class="customForm">
-            <label>Fornavn:</label>
-            <input type="text" id="first_name" name="first_name" required><br><br>
-            <label>Etternavn:</label>
-            <input type="text" id="last_name" name="last_name" required><br><br>
-            <label>E-post:</label>
-            <input type="email" id="email" name="email" required><br><br>
-            <label>Passord:</label>
-            <input type="password" id="password" name="password" required><br><br>
-            <label>Skriv Passord igjen:</label>
-            <input type="password" id="rep_password" name="rep_password" required><br><br>
-            <label>Profilbilde: </label>
-            <input type="file" name="fileToUpload" id="fileToUpload"><br><br>
-            <p>Undervisningsemne</p>
-            <label>Emnekode:</label>
-            <input type="text" id="emnekode" name="emnekode" required><br><br>
-            <label>Emnepin:</label>
-            <input type="text" id="emnepin" name="emnepin" required><br><br>
-            <input type="submit" value="Submit" name="registrer_foreleser">
-        </form>
-    </div>
+    <?php
+    if (isset($_GET["type"]) && $_GET["type"] == "0") {
+    ?>
+        <div id="student" class="tabcontent">
+            <form action="registrer-action.php" method="post" class="customForm">
+                <label>Fornavn:</label>
+                <input type="text" id="first_name" name="first_name" required><br><br>
+                <label>Etternavn:</label>
+                <input type="text" id="last_name" name="last_name" required><br><br>
+                <label>E-post:</label>
+                <input type="email" id="email" name="email" required><br><br>
+                <label>Passord:</label>
+                <input type="password" id="password" name="password" required><br><br>
+                <label>Skriv Passord igjen:</label>
+                <input type="password" id="rep_password" name="rep_password" required><br><br>
+                <input type="submit" value="Submit" name="registrer_student">
+            </form>
+        </div>
+    <?php
+    } else if (isset($_GET["type"]) && $_GET["type"] == "1") {
+    ?>
+        <div id="foreleser" class="tabcontent">
+            <form action="registrer-action.php" method="post" class="customForm" enctype="multipart/form-data">
+                <label>Fornavn:</label>
+                <input type="text" id="first_name" name="first_name" required><br><br>
+                <label>Etternavn:</label>
+                <input type="text" id="last_name" name="last_name" required><br><br>
+                <label>E-post:</label>
+                <input type="email" id="email" name="email" required><br><br>
+                <label>Passord:</label>
+                <input type="password" id="password" name="password" required><br><br>
+                <label>Skriv Passord igjen:</label>
+                <input type="password" id="rep_password" name="rep_password" required><br><br>
+                <label>Profilbilde: </label>
+                <input type="file" name="fileToUpload" id="fileToUpload"><br><br>
+                <p>Undervisningsemne</p>
+                <label>Emnekode:</label>
+                <input type="text" id="emnekode" name="emnekode" required><br><br>
+                <label>Emnepin:</label>
+                <input type="text" id="emnepin" name="emnepin" required><br><br>
+                <input type="submit" value="Submit" name="registrer_foreleser">
+            </form>
+        </div>
+    <?php
+    }
+    ?>
 
     <script>
         function openTab(evt, tabName) {

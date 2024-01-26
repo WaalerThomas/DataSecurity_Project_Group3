@@ -76,20 +76,23 @@ class User
 
         $hashedPassword = password_hash($_POST["password"], PASSWORD_BCRYPT);
         $userType = null;
+        $picture = null;
         if (! empty($_POST["registrer_student"])) {
-            $userType = $this->getUserTypeByName("student");
-        } else if (! empty($_POST["registrer_foreleser"])) {
-            $userType = $this->getUserTypeByName("lecturer");
+            $userType = $this->getUserTypeByName("student")[0]["iduser_type"];
+        } elseif (! empty($_POST["registrer_foreleser"])) {
+            $userType = $this->getUserTypeByName("lecturer")[0]["iduser_type"];
+            $picture = $_POST["profile_path"];
         }
 
-        $query = "INSERT INTO users (first_name, last_name, password, email, user_type_iduser_type)
-        VALUES (?, ?, ?, ?, ?);";
-        $paramType = "ssssi";
+        $query = "INSERT INTO users (first_name, last_name, password, email, picture, user_type_iduser_type)
+        VALUES (?, ?, ?, ?, ?, ?);";
+        $paramType = "sssssi";
         $paramArray = array(
             $_POST["first_name"],
             $_POST["last_name"],
             $hashedPassword,
             $_POST["email"],
+            $picture,
             $userType
         );
         $userResult = $this->ds->insert($query, $paramType, $paramArray);

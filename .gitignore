@@ -5,3 +5,4 @@ tmp/
 
 app/inc/config.php
 *_password.txt
+app/steg1/uploads/*.*
