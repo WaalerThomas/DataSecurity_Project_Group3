@@ -99,18 +99,5 @@ class User
         $_SESSION["userId"] = $userResult;
         return $userResult;
     }
-
-    function createPasswordResetToken($email, $key, $expDate) {
-        $query = "INSERT INTO `password_reset_tmp` (`email`, `key`, `expDate`)
-        VALUES (?, ?, ?)";
-        $paramType = "sss";
-        $paramArray = array(
-            $email,
-            $key,
-            $expDate
-        );
-        $userResult = $this->ds->insert($query, $paramType, $paramArray);
-        return $userResult;
-    }
 }
 ?>
