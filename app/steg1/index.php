@@ -1,6 +1,30 @@
 <?php
 // Start the session to be able to access $_SESSION.
 session_start();
+
+$displayName = "";
+$userType = "";
+
+// Populate "global" variables if someone is logged in
+if (! empty($_SESSION["userId"])) {
+  require_once __DIR__ . "/class/User.php";
+  $user = new User();
+  $userResult = $user->getUserById($_SESSION["userId"]);
+  if (! $userResult) {
+    unset($_SESSION["userId"]);
+    header("Location: ./");
+    exit;
+  }
+
+  $displayName = $userResult[0]["first_name"];
+
+  $userTypeResult = $user->getUserTypeById($userResult[0]["user_type_iduser_type"]);
+  if ($userTypeResult[0]["name"] == "student") {
+    $userType = "Student";
+  } else if ($userTypeResult[0]["name"] == "lecturer") {
+    $userType = "Foreleser";
+  }
+}
 ?>
 
 <!DOCTYPE html>
@@ -120,27 +144,6 @@ session_start();
     color: red;
   }
 </style>
-
-<?php
-$displayName = "";
-$userType = "";
-
-// Populate "global" variables if someone is logged in
-if (! empty($_SESSION["userId"])) {
-  require_once __DIR__ . "/class/User.php";
-  $user = new User();
-  $userResult = $user->getUserById($_SESSION["userId"]);
-
-  $displayName = $userResult[0]["first_name"];
-
-  $userTypeResult = $user->getUserTypeById($userResult[0]["user_type_iduser_type"]);
-  if ($userTypeResult[0]["name"] == "student") {
-    $userType = "Student";
-  } else if ($userTypeResult[0]["name"] == "lecturer") {
-    $userType = "Foreleser";
-  }
-}
-?>
 
 <div class="header">
   <?php

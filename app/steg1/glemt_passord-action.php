@@ -50,7 +50,6 @@ if (! empty($_POST["email"])) {
 
     $passToken = new PasswordToken();
     $isCreated = $passToken->createPasswordResetToken($email, $key, $expDate);
-    // TODO: Fix this faulty if
     if (! $isCreated) {
         $_SESSION["errorMessage"] .= "Feilet under oppretting av token. ";
         header("Location: glemt_passord.php");
@@ -76,5 +75,7 @@ if (! empty($_POST["email"])) {
     $output.='<p>Datasecurity Project Group 3</p>';
     $body = $output; 
     $subject = "Password Recovery - Datasecurity Project Group 3";
+
+    echo $output;
 }
 ?>

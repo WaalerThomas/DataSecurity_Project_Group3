@@ -61,19 +61,10 @@ if (isset($_POST["email"]) && isset($_POST["action"]) && ($_POST["action"] == "u
         echo "<div class='error'>".$error."</div><br />";
     } else {
         $user = new User();
-        $userResult = $user->updateUserPassword($_POST["email"], $_POST["pass1"]);
-        if ($userResult == 0) {
-            echo "<p>IT FAILED TO UPDATE</p>";
-        }
-        else {
-            echo "<p>UPDATED USERS</p>";
-        }
-        echo "UserResult: " . $userResult;
-        echo "Email: " . $_POST["email"];
-        echo "Pass: " . $_POST["pass1"];
+        $user->updateUserPassword($_POST["email"], $_POST["pass1"]);
 
         $passToken = new PasswordToken();
-        $passResult = $passToken->removeEntry($_POST["email"]);
+        $passToken->removeEntry($_POST["email"]);
 
         echo '<div class="error"><p>Congratulations! Your password has been updated successfully.</p><p><a href="./login.php">Click here</a> to Login.</p></div><br />';
     }

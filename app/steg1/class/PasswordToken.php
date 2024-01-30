@@ -21,6 +21,8 @@ class PasswordToken
     }
 
     function createPasswordResetToken($email, $key, $expDate) {
+        // TODO: Check first if there is an active token already
+        
         $query = "INSERT INTO `password_reset_temp` (`email`, `key`, `expDate`)
         VALUES (?, ?, ?)";
         $paramType = "sss";

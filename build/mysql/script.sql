@@ -87,9 +87,11 @@ DROP TABLE IF EXISTS `password_reset_temp`;
 
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `password_reset_temp` (
+  `id` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(250) NOT NULL,
   `key` VARCHAR(250) NOT NULL,
-  `expDate` datetime NOT NULL
+  `expDate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
 SHOW WARNINGS;

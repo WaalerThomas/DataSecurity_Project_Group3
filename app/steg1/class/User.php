@@ -108,8 +108,7 @@ class User
             $hashedPassword,
             $email
         );
-        $userResult = $this->ds->numRows($query, $paramType, $paramArray);
-        return $userResult;
+        $userResult = $this->ds->execute($query, $paramType, $paramArray);
     }
 }
 ?>
