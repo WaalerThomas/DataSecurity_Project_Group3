@@ -81,6 +81,20 @@ ENGINE = InnoDB;
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
+-- Table `password_reset_temp`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `password_reset_temp`;
+
+SHOW WARNINGS;
+CREATE TABLE IF NOT EXISTS `password_reset_temp` (
+  `email` VARCHAR(250) NOT NULL,
+  `key` VARCHAR(250) NOT NULL,
+  `expDate` datetime NOT NULL
+) ENGINE = InnoDB;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
 -- Table `users`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `users` ;
