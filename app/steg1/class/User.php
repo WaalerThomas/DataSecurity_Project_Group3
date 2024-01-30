@@ -99,5 +99,17 @@ class User
         $_SESSION["userId"] = $userResult;
         return $userResult;
     }
+
+    function updateUserPassword($email, $password) {
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $query = "UPDATE `users` SET `password` = ? WHERE `email` = ?";
+        $paramType = "ss";
+        $paramArray = array(
+            $hashedPassword,
+            $email
+        );
+        $userResult = $this->ds->numRows($query, $paramType, $paramArray);
+        return $userResult;
+    }
 }
 ?>

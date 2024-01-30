@@ -12,10 +12,13 @@
 /* Note: Check that a used with that mail exists */
 /* Note: Send mail to user with token link thingy */
 require_once __DIR__ . "/class/User.php";
+require_once __DIR__ . "/class/PasswordToken.php";
 
 session_start();
 
 if (! empty($_POST["email"])) {
+    $_SESSION["errorMessage"] = "";
+
     // Clean email input from user
     $email = $_POST["email"];
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
@@ -41,12 +44,13 @@ if (! empty($_POST["email"])) {
         date("H"), date("i"), date("s"), date("m"), date("d") + 1, date("Y")
     );
     $expDate = date("Y-m-d H:i:s", $expFormat);
-    $key = md5(2418 * 2 + $email);
+    $key = md5((string)(2418 * 2) . $email);
     $addKey = substr(md5(uniqid(rand(), 1)), 3, 10);
     $key = $key . $addKey;
 
     $passToken = new PasswordToken();
     $isCreated = $passToken->createPasswordResetToken($email, $key, $expDate);
+    // TODO: Fix this faulty if
     if (! $isCreated) {
         $_SESSION["errorMessage"] .= "Feilet under oppretting av token. ";
         header("Location: glemt_passord.php");
@@ -72,7 +76,5 @@ if (! empty($_POST["email"])) {
     $output.='<p>Datasecurity Project Group 3</p>';
     $body = $output; 
     $subject = "Password Recovery - Datasecurity Project Group 3";
-
-
 }
 ?>
