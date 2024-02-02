@@ -110,5 +110,30 @@ class User
         );
         $userResult = $this->ds->execute($query, $paramType, $paramArray);
     }
+
+    function passCheck($id, $password) {
+        $userResult = $this->getUserById($id);
+        $hashedPassword = $userResult[0]["password"];
+        $isLoginPassword = 0;
+        if (password_verify($password, $hashedPassword)) {
+            $isLoginPassword = 1;
+        }
+
+        if ($isLoginPassword == 1) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    function getEmailById($id) {
+        $query = "SELECT email FROM users WHERE iduser = ?";
+        $paramType = "i";
+        $paramArray = array(
+            $id
+        );
+        $userResult = $this->ds->select($query, $paramType, $paramArray);
+
+        return $userResult;
+    }
 }
 ?>
