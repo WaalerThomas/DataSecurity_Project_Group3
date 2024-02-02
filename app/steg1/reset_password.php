@@ -12,12 +12,12 @@ if (isset($_GET["key"]) && isset($_GET["email"]) && isset($_GET["action"])
     $passToken = new PasswordToken();
     $tokenResult = $passToken->getEntryFromKeyAndEmail($_GET["email"], $_GET["key"]);
     if (empty($tokenResult)) {
-        $error .= '<h2>Invalid Link</h2>
-        <p>The link is invalid/expired. Either you did not copy the correct link
-        from the email, or you have already used the key in which case it is 
-        deactivated.</p>
+        $error .= '<h2>Ugyldig link</h2>
+        <p>Linken er ugyldig/utløpt. Enten kopierte du ikke den riktige lenken
+        fra e-posten, eller du har allerede brukt nøkkelen i så fall
+        så er den deaktivert.</p>
         <p><a href="./glemt_passord.php">
-        Click here</a> to reset password.</p>';
+        Klikk her</a> for å resette passord.</p>';
     } else {
         $expDate = $tokenResult[0]["expDate"];
         if ($expDate >= $curDate) {
@@ -33,11 +33,11 @@ if (isset($_GET["key"]) && isset($_GET["email"]) && isset($_GET["action"])
                 <input type="password" name="pass2" maxlength="15" required/>
                 <br /><br />
                 <input type="hidden" name="email" value="<?php echo $_GET["email"];?>"/>
-                <input type="submit" value="Reset Password" />
+                <input type="submit" value="Reset Passord" />
             </form>
         <?php
         } else {
-            $error .= "<h2>Link Expired</h2><p>The link is expired. You are trying to use the expired link which as valid only 24 hours (1 days after request).<br /><br /></p>";
+            $error .= "<h2>Link Utløpt</h2><p>Linken er utløpt. Du prøver å bruke den utløpte lenken som kun er gyldig i 24 timer (1 dage etter forespørsel).<br /><br /></p>";
         }
     }
 
@@ -55,8 +55,9 @@ if (isset($_POST["email"]) && isset($_POST["action"]) && ($_POST["action"] == "u
     $error = "";
 
     if ($_POST["pass1"] != $_POST["pass2"]) {
-        $error .= "<p>Password do not match, both passwords should be the same.<br><br></p>";
+        $error .= "<p>Passordene er ikke like.<br><br></p>";
     }
+
     if ($error != "") {
         echo "<div class='error'>".$error."</div><br />";
     } else {
@@ -66,7 +67,7 @@ if (isset($_POST["email"]) && isset($_POST["action"]) && ($_POST["action"] == "u
         $passToken = new PasswordToken();
         $passToken->removeEntry($_POST["email"]);
 
-        echo '<div class="error"><p>Congratulations! Your password has been updated successfully.</p><p><a href="./login.php">Click here</a> to Login.</p></div><br />';
+        echo '<div class="error"><p>Gratulerer! Passordet ditt har blitt oppdatert.</p><p><a href="./login.php">Klikk her</a> for å logge inn.</p></div><br />';
     }
 }
 ?>
