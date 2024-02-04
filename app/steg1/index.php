@@ -117,6 +117,7 @@ if (! empty($_SESSION["userId"])) {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    height: 1rem;
   }
 
   .username-answer{
@@ -129,6 +130,7 @@ if (! empty($_SESSION["userId"])) {
 
   .comment{
     margin-left: 1rem;
+    margin-top: 0;
   }
 
   #new-comment {
@@ -179,6 +181,11 @@ if (! empty($_SESSION["userId"])) {
     cursor: pointer;
   }
 
+  .comment-top{
+    display: flex;
+    align-items: center;
+  }
+
 </style>
 
 <div class="header">
@@ -206,20 +213,6 @@ if (! empty($_SESSION["userId"])) {
     </section>
     <div class="info">
       <div id="commentsection">
-        <div class="comment-1">
-          <div class="comment-info">
-            <p class="username-comment">username</p>
-            <p class="comment">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        </div>
-       </div>
-        <div class="answer-1">
-          <div class="comment-answer">
-            <p class="username-answer">username</p>
-            <p class="answer">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, 
-              similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
-          </div>
-        </div>
       </div>
       <aside class="emneansvarlig">
         <img src="https://placehold.co/100x100.png"></img>
@@ -282,9 +275,12 @@ if (! empty($_SESSION["userId"])) {
     var newCommentInfoDiv = document.createElement("div");
     newCommentInfoDiv.classList.add("comment-info");
 
+    var newCommentTopDiv = document.createElement("div");
+    newCommentTopDiv.classList.add("comment-top");
+
     var newUsernameParagraph = document.createElement("p");
     newUsernameParagraph.classList.add("username-comment");
-    newUsernameParagraph.textContent = "username";
+    newUsernameParagraph.textContent = "Spørsmål";
 
     var reportButton = document.createElement("button");
     reportButton.classList.add("report-button");
@@ -309,14 +305,16 @@ if (! empty($_SESSION["userId"])) {
         handleAnswerButtonClick(newCommentDiv);
     };
 
-    newCommentInfoDiv.appendChild(newUsernameParagraph);
-    newCommentInfoDiv.appendChild(reportButton);
+    newCommentInfoDiv.appendChild(newCommentTopDiv);
+    newCommentTopDiv.appendChild(newUsernameParagraph);
+    newCommentTopDiv.appendChild(reportButton);
+    
 
     newCommentDiv.appendChild(newCommentInfoDiv);
     newCommentDiv.appendChild(newCommentParagraph);
     newCommentDiv.appendChild(answerTextbox);
     newCommentDiv.appendChild(answerButton);
-
+    
     document.getElementById("commentsection").appendChild(newCommentDiv);
 }
 
@@ -331,7 +329,7 @@ function handleAnswerButtonClick(commentDiv) {
 
     var newUsernameParagraph = document.createElement("p");
     newUsernameParagraph.classList.add("username-answer");
-    newUsernameParagraph.textContent = "username";
+    newUsernameParagraph.textContent = "Svar";
 
     var newAnswerParagraph = document.createElement("p");
     newAnswerParagraph.classList.add("answer");
