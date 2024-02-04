@@ -1,3 +1,32 @@
+<?php
+// Start the session to be able to access $_SESSION.
+session_start();
+
+$displayName = "";
+$userType = "";
+
+// Populate "global" variables if someone is logged in
+if (! empty($_SESSION["userId"])) {
+  require_once __DIR__ . "/class/User.php";
+  $user = new User();
+  $userResult = $user->getUserById($_SESSION["userId"]);
+  if (! $userResult) {
+    unset($_SESSION["userId"]);
+    header("Location: ./");
+    exit;
+  }
+
+  $displayName = $userResult[0]["first_name"];
+
+  $userTypeResult = $user->getUserTypeById($userResult[0]["user_type_iduser_type"]);
+  if ($userTypeResult[0]["name"] == "student") {
+    $userType = "Student";
+  } else if ($userTypeResult[0]["name"] == "lecturer") {
+    $userType = "Foreleser";
+  }
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,189 +35,171 @@
 <body>
 
 <style>
-.button {
-  padding: 6px 18px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 15px;
-  margin: 4px 2px;
-  cursor: pointer;
-}
+  * {
+    box-sizing: border-box;
+  }
 
-.button1 {  
-  padding: 6px 18px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 15px;
-  margin: 4px 2px;
-  cursor: pointer;
-}
+  body {
+    margin: 0;
+  }
 
-/*div {
-  padding: 10px 40px;
-  text-align: right;
-  text-decoration: none;
-  display: inline-block;
-  margin: 4px 2px;
-  cursor: pointer;
-  position: absolute;
-  left: 90%;
-}*/
+  .header {
+    overflow: hidden;
+    background-color: #333;
+  }
 
-div1 {
-  padding: 10px 40px;
-  text-align: right;
-  text-decoration: none;
-  display: inline-block;
-  /*margin: 4px 2px;*/
-  cursor: pointer;
-  position: absolute;
-  left: 40%;
-  top: 50%;
-}
+  .header a {
+    float: right;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
 
-* {
-  box-sizing: border-box;
-}
+  .header a:hover {
+    background-color: #ddd;
+    color: black;
+  }
 
-body {
-  margin: 0;
-}
+  .header span {
+    color: white;
+    display: block;
+    float: left;
+    text-align: center;
+    padding: 14px 16px;
+  }
 
-.header {
-  overflow: hidden;
-  background-color: #333;
-}
+  .column {
+    float: left;
+    padding: 10px;
+  }
+  .column.side {
+    width: 25%;
+  }
+  .column.middle {
+    width: 75%;
+  }
+  .column.full {
+    width: 100%;
+  }
 
-.header a {
-  float: right;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
+  .row::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
 
-.header a:hover {
-  background-color: #ddd;
-  color: black;
-}
+  .emneinput {
+    position: absolute;
+    top: 80%;
+  }
 
-.column {
-  float: left;
-  padding: 10px;
-}
+  #commentsection{
+    border: 1px solid black;
+    width: 70%;
+  }
+  .commentsection{
+    border: 1px solid black;
+    width: 70%;
+  }
 
-.column.side {
-  width: 25%;
-}
+  .username-comment{
+    font-weight: bold; 
+    color: grey;
+    margin-left: 1rem;
+    border-bottom: 1px solid black;
+    width: 100px;
+  }
 
-.column.middle {
-  width: 75%;
-}
+  .report-button {
+    margin-left: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 
-.column.full {
-  width: 100%;
-}
+  .username-answer{
+    font-weight: bold; 
+    color: black;
+    margin-left: 2.5rem;
+    border-bottom: 1px solid black;
+    width: 100px;
+  }
 
-.row::after {
-  content: "";
-  display: table;
-  clear: both;
-}
+  .comment{
+    margin-left: 1rem;
+  }
 
-.emneinput {
-  position: absolute;
-  top: 80%;
-}
+  #new-comment {
+    flex: 1;
+  }
 
-#commentsection{
-  border: 1px solid black;
-  width: 70%;
-}
+  #send-comment{
+    margin-top: .5rem;
+  }
 
-.username-comment {
-  font-weight: bold;
-  color: grey;
-  margin-left: 1rem;
-  border-bottom: 1px solid black;
-  display: inline-block;
-}
+  .answer{
+    margin-left: 2.5rem;
+  }
 
-.report-button {
-  margin-left: 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
+  .emneinfo{
+    display: flex;
+    gap: 1rem;
+  }
 
-.username-answer{
-  font-weight: bold; 
-  color: black;
-  margin-left: 2.5rem;
-  border-bottom: 1px solid black;
-  width: 100px;
-}
+  .info{
+    display: flex;
+    gap: 10px;
+  }
 
-.comment {
-  margin-left: 1rem;
-}
+  .teachername{
+    font-size: 15px;
+    padding-top: .5rem;
+    margin: 0;
+  }
 
-#new-comment {
-  flex: 1;
-}
+  .error_msg {
+    color: red;
+  }
 
-#send-comment{
-  margin-top: .5rem;
-}
+  .answer-textbox {
+    margin-top: 4px;
+    margin-left: 1rem; /* Adjust the margin as needed */
+    padding: 6px;
+    width: 70%;
+  }
 
-.answer{
-  margin-left: 2.5rem;
-}
+  .answer-button {
+    margin-top: 4px;
+    margin-left: 1rem; /* Adjust the margin as needed */
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 
-.emneinfo{
-  display: flex;
-  gap: 1rem;
-}
-
-.info{
-  display: flex;
-  gap: 10px;
-}
-
-.teachername{
-  font-size: 15px;
-  padding-top: .5rem;
-  margin: 0;
-}
-
-.answer-textbox {
-  margin-top: 4px;
-  margin-left: 1rem; /* Adjust the margin as needed */
-  padding: 6px;
-  width: 70%;
-}
-
-.answer-button {
-  margin-top: 4px;
-  margin-left: 1rem; /* Adjust the margin as needed */
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
 </style>
 
 <div class="header">
-  <a href="registrer.php" >Registrer</a>
-  <a href="login.php">Logg inn</a>
+  <?php
+  if (! empty($displayName) && !empty($userType)) {
+  ?>
+    <span><?php echo $displayName . " - " . $userType; ?></span>
+    <a href="logout.php">Logg ut</a>
+    <a href="bytte_passord.php">Bytte passord</a>
+  <?php
+  } else {
+  ?>
+    <a href="registrer.php" >Registrer</a>
+    <a href="login.php">Logg inn</a>
+  <?php
+  }
+  ?>
 </div>
 
 <div class="row">
   <div class="column middle">
-    <h2>Main Content</h2>
     <section class="emneinfo">
       <h3>Emnekode</h3>
       <h3>Emnenavn</h3>
@@ -213,18 +224,17 @@ body {
       <aside class="emneansvarlig">
         <img src="https://placehold.co/100x100.png"></img>
         <h3 class="teachername">Emneansvarlig</h3>
-      </aside>
-      
+      </aside>      
     </div>
     <div id="send-comment">
       <input type="text" id="new-comment" placeholder="Skriv en kommentar...">
       <button id="button" onclick="handleButtonClick()">Send</button> 
     </div>
-    <?php 
+  </div>
+
+  <?php 
         echo $_POST["pin"]
     ?>
-
-    </div>
   
   <div class="column side">
     <label>Choose a course:</label>
@@ -233,14 +243,21 @@ body {
         <option value="informasjonssystemer">Informasjonssystemer</option>
       </select>
     <h2>Emnesøk</h2>
-    <?php /*<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit..</p>*/?>
-    <form action="?" method="post"><?php /* class="emneinput"*/?>
-        <?php /*<label >Emnekode input</label> <br> style="position:absolute; left: 40%;"*/?>
-        <label>Emnekode:</label>
-        <input type="text" id="emnekode" name="emnekode" required><br><br>
-        <label>PIN-kode:</label>
-        <input type="password" id="pin" name="pin" required><br><br>
-    <input type="submit" value="Submit">
+    <?php
+    // Display error produced from the action script on the form
+    if (isset($_SESSION["errorMessage"])) {
+    ?>
+        <div class="error_msg"><?php  echo $_SESSION["errorMessage"]; ?></div>
+    <?php
+        unset($_SESSION["errorMessage"]);
+    }
+    ?>
+    <form action="subject-action.php" method="post">
+      <label>Emnekode:</label>
+      <input type="text" id="emnekode" name="emnekode" required><br><br>
+      <label>PIN-kode:</label>
+      <input type="password" id="pin" name="pin" required><br><br>
+      <input type="submit" value="submit" name="subject-search">
     </form>
   </div>
 </div>
@@ -250,6 +267,7 @@ body {
 /* Note: generate the said "emne" in "column middle" */
 
 ?>
+
 <script>
 
   var id = 0;
