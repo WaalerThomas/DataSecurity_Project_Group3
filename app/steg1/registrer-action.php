@@ -1,5 +1,8 @@
 <?php
-function save_profile_picture() {
+// TODO: Check that the "logic" works XD
+
+
+function checkProfilePictures() {
     $target_dir = "uploads/";
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $uploadOk = 1;
@@ -29,17 +32,7 @@ function save_profile_picture() {
         $uploadOk = 0;
     }
 
-    if ($uploadOk == 0) {
-        $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Sorry, your file was not uploaded.";
-    } else {
-        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            return $target_file;
-        } else {
-            $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Sorry, there was an error uploading your file.";
-        }
-    }
-
-    return null;
+    return array($uploadOk, $target_file);
 }
 
 if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"])) {
@@ -67,11 +60,16 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
     }
 
     # Do check for only the lecturer
+    $profResult = array();
     if (! empty($_POST["registrer_foreleser"])) {
         $userType = "1";
 
-        $target_file = save_profile_picture();
-        $_POST["profile_path"] = $target_file;
+        $profResult = checkProfilePictures();
+        if ($profResult[0] == 0) {
+            $_SESSION["errorMessage"] .= "Sorry, your file was not uploaded. ";
+        } else {
+            $_POST["profile_path"] = $profResult[1];   
+        }
     }
 
     # If errors then send back to page with error messages
@@ -85,16 +83,31 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
     $user = new User();
     $isCreated = $user->createUser();
     if (! $isCreated) {
-        // It has failed, so need to remove the profile picture
-        // TODO: Implement
-
         $_SESSION["errorMessage"] = "Feilet under oppretting av bruker";
         header("Location: registrer.php?type=" . $userType);
         exit;
     }
 
+    // Save the profile picture now that the user is created
+    if (! empty($profResult) && $profResult[0] == 1) {
+        $target_file = $profResult[1];
+        if (! move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+            $_SESSION["errorMessage"] .= "Sorry, there was an error uploading your file.";
+            header("Location: registrer.php?type=" . $userType);
+            exit;
+        }
+    }
+
     // Now create the subject if it is a lecturer
-    // TODO: Implement
+    require_once __DIR__ . "/class/Course.php";
+    $course = new Course();
+    $isCourseCreated = $course->createCourse($_SESSION["userId"]);
+    if (! $isCourseCreated) {
+        $_SESSION["errorMessage"] = "Feilet under oppretting av emne";
+        header("Location: registrer.php?type=" . $userType);
+        exit;
+    }
+    
     header("Location: ./");
 }
 ?>

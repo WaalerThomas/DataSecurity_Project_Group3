@@ -43,6 +43,7 @@ SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `courses` (
   `idcourses` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
+  `pin` INT NOT NULL,
   `users_iduser` INT NOT NULL,
   PRIMARY KEY (`idcourses`))
 ENGINE = InnoDB;
