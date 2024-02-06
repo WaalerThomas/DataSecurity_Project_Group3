@@ -19,6 +19,12 @@ class Course
         return $courseResult;
     }
 
+    function getAllCourses() {
+        $query = "SELECT * FROM courses";
+        $courseResult = $this->ds->select($query);
+        return $courseResult;
+    }
+
     function createCourse($userId) {
         # Check if the course already exists
         $courseResult = $this->getCourseByName($_POST["emnekode"]);

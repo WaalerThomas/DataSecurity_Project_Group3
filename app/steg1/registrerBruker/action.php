@@ -3,7 +3,7 @@
 
 
 function checkProfilePictures() {
-    $target_dir = "uploads/";
+    $target_dir = "../uploads/";
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
@@ -78,6 +78,8 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
         exit;
     }
 
+    // TODO: Start transaction
+
     # Send request to database
     require_once __DIR__ . "/../dbClasses/User.php";
     $user = new User();
@@ -86,16 +88,6 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
         $_SESSION["errorMessage"] = "Feilet under oppretting av bruker";
         header("Location: ./?type=" . $userType);
         exit;
-    }
-
-    // Save the profile picture now that the user is created
-    if (! empty($profResult) && $profResult[0] == 1) {
-        $target_file = $profResult[1];
-        if (! move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            $_SESSION["errorMessage"] .= "Sorry, there was an error uploading your file.";
-            header("Location: ./?type=" . $userType);
-            exit;
-        }
     }
 
     // Now create the subject if it is a lecturer
@@ -109,6 +101,18 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
             exit;
         }
     }
+
+    // Save the profile picture now that the user is created
+    if (! empty($profResult) && $profResult[0] == 1) {
+        $target_file = $profResult[1];
+        if (! move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+            $_SESSION["errorMessage"] .= "Sorry, there was an error uploading your file.";
+            header("Location: ./?type=" . $userType);
+            exit;
+        }
+    }
+
+    // TODO: Commit transaction
     
     header("Location: ../");
 }

@@ -234,8 +234,17 @@ if (! empty($_SESSION["userId"])) {
   <div class="column side">
     <label>Choose a course:</label>
       <select>
-        <option value="dataingeniør">Ingeniørfag, Data</option>
-        <option value="informasjonssystemer">Informasjonssystemer</option>
+        <?php
+        // Get all courses
+        require_once __DIR__ . "/dbClasses/Course.php";
+        $course = new Course();
+        $courseResult = $course->getAllCourses();
+        if ($courseResult) {
+          foreach ($courseResult as $c) {
+            echo '<option value="' . $c["idcourses"] . '">' . $c["name"] . '</option>';
+          }
+        }
+        ?>
       </select>
     <h2>Emnesøk</h2>
     <?php
