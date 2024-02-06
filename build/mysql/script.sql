@@ -84,6 +84,35 @@ ENGINE = InnoDB;
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
+-- Table `api_keys`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `api_keys` ;
+
+SHOW WARNINGS;
+CREATE TABLE IF NOT EXISTS `api_keys` (
+  `api_key` VARCHAR(64) NOT NULL,
+  `auth_key` VARCHAR(64) NOT NULL,
+  `expDate` DATETIME NOT NULL,
+  PRIMARY KEY (`api_key`))
+ENGINE = InnoDB;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
+-- Table `api_sessions`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `api_sessions` ;
+
+SHOW WARNINGS;
+CREATE TABLE IF NOT EXISTS `api_sessions` (
+  `session_id` VARCHAR(64) NOT NULL,
+  `users_iduser` INT NOT NULL,
+  PRIMARY KEY (`session_id`))
+ENGINE = InnoDB;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
 -- Table `reports`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `reports` ;

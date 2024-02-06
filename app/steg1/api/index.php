@@ -11,6 +11,8 @@
 
 <?php
 /**
+ * Følger denne for API auth, ting: https://stackoverflow.com/questions/36514344/how-to-make-use-of-session-in-rest-api
+ * 
  * Det som trengs å bli lagt til i API er:
  * - De samme mulighetene som nettsiden for innlogget student, untatt glemt passord og passordbytte.
  * X Se en liste over alle emnene
@@ -45,6 +47,7 @@
 <h3>Antagelser</h3>
 <p>Antar at vi ikke trenger å håndtere innlogging i API med tanke på at den skal ha "... de samme mulighetene som nettsiden for <b>innlogget</b> student ..."</p>
 
-
+<h3>Bruksanvisning</h3>
+<h4>Oppretting av API nøkkel</h4>
 </body>
 </html>

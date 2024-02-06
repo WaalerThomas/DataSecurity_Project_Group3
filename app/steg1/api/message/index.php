@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . "/../../dbClasses/Message.php";
 
-//header("Content-Type: application/json; charset=UTF-8");
+header("Content-Type: application/json; charset=UTF-8");
 
 $message = new Message();
 
@@ -20,7 +20,7 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     /**
      * Enpoint - /message?course={course_name}
      */
-    if (isset($_POST['course']) && isset($_POST['message'])) {
+    if (isset($_POST['course']) && isset($_POST['message']) && !empty($_POST['course']) && !empty($_POST['message'])) {
         $messageResponse = $message->createMessage($_POST['message'], $_POST['course'], 2);
         if (! $messageResponse) {
             $respons["errorMessage"] = "Feilet under oppretting av melding";
