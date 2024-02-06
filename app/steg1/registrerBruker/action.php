@@ -74,17 +74,17 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
 
     # If errors then send back to page with error messages
     if (! empty($_SESSION["errorMessage"])) {
-        header("Location: registrer.php?type=" . $userType);
+        header("Location: ./?type=" . $userType);
         exit;
     }
 
     # Send request to database
-    require_once __DIR__ . "/class/User.php";
+    require_once __DIR__ . "/../dbClasses/User.php";
     $user = new User();
     $isCreated = $user->createUser();
     if (! $isCreated) {
         $_SESSION["errorMessage"] = "Feilet under oppretting av bruker";
-        header("Location: registrer.php?type=" . $userType);
+        header("Location: ./?type=" . $userType);
         exit;
     }
 
@@ -93,23 +93,23 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
         $target_file = $profResult[1];
         if (! move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
             $_SESSION["errorMessage"] .= "Sorry, there was an error uploading your file.";
-            header("Location: registrer.php?type=" . $userType);
+            header("Location: ./?type=" . $userType);
             exit;
         }
     }
 
     // Now create the subject if it is a lecturer
     if (! empty($_POST["registrer_foreleser"])) {
-        require_once __DIR__ . "/class/Course.php";
+        require_once __DIR__ . "/../dbClasses/Course.php";
         $course = new Course();
         $isCourseCreated = $course->createCourse($_SESSION["userId"]);
         if (! $isCourseCreated) {
             $_SESSION["errorMessage"] = "Feilet under oppretting av emne";
-            header("Location: registrer.php?type=" . $userType);
+            header("Location: ./?type=" . $userType);
             exit;
         }
     }
     
-    header("Location: ./");
+    header("Location: ../");
 }
 ?>
