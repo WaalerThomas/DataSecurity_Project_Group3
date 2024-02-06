@@ -79,6 +79,18 @@ class DataSource
         $stmt->execute();
     }
 
+    public function startTransaction() {
+        $stmt = $this->conn->query("START TRANSACTION");
+    }
+
+    public function rollbackTransaction() {
+        $stmt = $this->conn->query("ROLLBACK");
+    }
+
+    public function commitTransaction() {
+        $stmt = $this->conn->query("COMMIT");
+    }
+
     /**
      * 1. Prepares parameter binding
      * 2. Bind prameters to the sql statement

@@ -4,9 +4,13 @@ class Course
     private $dbConn;
     private $ds;
 
-    function __construct() {
-        require_once __DIR__ . "/DataSource.php";
-        $this->ds = new DataSource();
+    function __construct($ds = NULL) {
+        if ($ds == NULL) {
+            require_once __DIR__ . "/DataSource.php";
+            $this->ds = new DataSource();
+        } else {
+            $this->ds = $ds;
+        }
     }
 
     function getCourseByName($name) {
