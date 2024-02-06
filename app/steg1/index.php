@@ -260,7 +260,7 @@ if (! empty($_SESSION["userId"])) {
       <label>Emnekode:</label>
       <input type="text" id="emnekode" name="emnekode" required><br><br>
       <label>PIN-kode:</label>
-      <input type="password" id="pin" name="pin" required><br><br>
+      <input type="number" step="1" id="pin" name="pin" min="0" max="9999" required><br><br>
       <input type="submit" value="submit" name="subject-search">
     </form>
   </div>
