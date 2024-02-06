@@ -23,8 +23,24 @@ class Course
         return $courseResult;
     }
 
+    function getCourseByNameInfo($name) {
+        $query = "SELECT idcourses, name, users_iduser FROM courses WHERE name = ?";
+        $paramType = "s";
+        $paramArray = array(
+            $name
+        );
+        $courseResult = $this->ds->select($query, $paramType, $paramArray);
+        return $courseResult;
+    }
+
     function getAllCourses() {
         $query = "SELECT * FROM courses";
+        $courseResult = $this->ds->select($query);
+        return $courseResult;
+    }
+
+    function getAllCoursesInfo() {
+        $query = "SELECT idcourses, name, users_iduser FROM courses";
         $courseResult = $this->ds->select($query);
         return $courseResult;
     }
@@ -39,8 +55,6 @@ class Course
 
         return $courseResult;
     }
-
-
 
     function createCourse($userId) {
         # Check if the course already exists
