@@ -4,7 +4,7 @@ session_start();
 
 // Check if they are logged in or not
 if (empty($_SESSION["userId"])) {
-    header("Location: ./");
+    header("Location: ../");
     exit;
 }
 ?>
@@ -29,7 +29,7 @@ if (isset($_SESSION["errorMessage"])) {
     unset($_SESSION["errorMessage"]);
 }
 ?>
-<form action="bytte_passord-action.php" method="post">
+<form action="action.php" method="post">
     <label>Gammelt Passord:</label>
     <input type="password" id="passord_old" name="passord_old" required><br><br>
     <label>Nytt Passord:</label>
