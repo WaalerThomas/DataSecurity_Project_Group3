@@ -4,7 +4,7 @@ session_start();
 
 // Check if they are logged in or not
 if (empty($_SESSION["userId"])) {
-    header("Location: ./");
+    header("Location: ../");
     exit;
 }
 
@@ -13,7 +13,7 @@ $user = new User();
 $userResult = $user->getUserById($_SESSION["userId"]);
 if (! $userResult) {
     unset($_SESSION["userId"]);
-    header("Location: ./");
+    header("Location: ../");
     exit;
 }
 
