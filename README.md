@@ -21,17 +21,5 @@ Dersom du ikke bruker docker desktop så kan du kjøre følgende til å koble ti
 2. Koble til ved å skrive inn `docker exec -ti <docker_container_name> /bin/bash` i kommandovinduet, hvor *<docker_container_name> er enten; *datasecurity_project_group3_mysql_1* eller *datasecurity_project_group3_php-apache_1*.
 
 ### Opprette database fra fil
-Det finnes MySQL filer under /build/mysql. Disse er følgende:
-- data.sql
-    - Filen som oppretter databasen.
-- clean.sql
-    - Filen som fjerner alle tabellene i databasen.
-clean.sql filen er grei å kjøre før du kjører data.sql dersom du har allerede opprettet databasen for å starte "fresh".
 1. I kommandovindu, naviger til mappen der alle sql filene befinner seg, *./build/mysql/*.
-2. Kjør sql fil ved å skrive inn `docker exec -i datasecurity_project_group3_mysql_1 mysql -uroot -p<password> datasec_db < <databasefil>` i kommandovinduet, hvor *<password>* er passordet du har skrevet i *db_root_password.txt* og *<databasefil>* er enten; *data.sql* eller *clean.sql*
-
-### For testing av innlogging
-Lagde en test tabell i databasen for å teste logikken for å logge seg inn.
-For å logge inn med den brukeren så blir det:
-email: kate@wince.com
-pass: kate@03
+2. Kjør sql fil ved å skrive inn `docker exec -i datasecurity_project_group3_mysql_1 mysql -uroot -p<password> datasec_db < script.sql` i kommandovinduet, hvor *<password>* er passordet du har skrevet i *db_root_password.txt*.
