@@ -8,16 +8,16 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema datasec_db
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `mydb` ;
+DROP SCHEMA IF EXISTS `datasec_db` ;
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema datasec_db
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `datasec_db` DEFAULT CHARACTER SET utf8 ;
 SHOW WARNINGS;
-USE `mydb` ;
+USE `datasec_db` ;
 
 -- -----------------------------------------------------
 -- Table `comments`
@@ -137,7 +137,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- Data for table `courses`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `mydb`;
+USE `datasec_db`;
 -- INSERT INTO `courses` (`idcourses`, `name`, `users_iduser`) VALUES (1, 'Ingeniørfag, data', DEFAULT);
 -- INSERT INTO `courses` (`idcourses`, `name`, `users_iduser`) VALUES (2, 'Informasjonssystemer', DEFAULT);
 
@@ -148,7 +148,7 @@ COMMIT;
 -- Data for table `user_type`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `mydb`;
+USE `datasec_db`;
 INSERT INTO `user_type` (`iduser_type`, `name`) VALUES (1, 'student');
 INSERT INTO `user_type` (`iduser_type`, `name`) VALUES (2, 'lecturer');
 INSERT INTO `user_type` (`iduser_type`, `name`) VALUES (3, 'admin');
@@ -160,7 +160,13 @@ COMMIT;
 -- Data for table `users`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `mydb`;
+USE `datasec_db`;
+INSERT INTO `users` (`first_name`, `last_name`, `password`, `email`, `picture`, `user_type_iduser_type`)
+VALUES ('Admin', 'Admin', '$2y$10$QuEY/hEkZ5nvlE2Zvc.MReB.uxHehvh6vNmUNCSYROPWjSeRHQc1.', 'admin@company.no', NULL, (
+  SELECT `iduser_type`
+  FROM `user_type`
+  WHERE `name` = 'admin'
+));
 -- INSERT INTO `users` (`iduser`, `first_name`, `last_name`, `password`, `email`, `picture`, `user_type_iduser_type`) VALUES (1, 'Tobias', 'Sommervold', DEFAULT, 'tobiasws@hiof.no', NULL, DEFAULT);
 
 COMMIT;
