@@ -19,10 +19,16 @@ if (! empty($_SESSION["userId"])) {
   $displayName = $userResult[0]["first_name"];
 
   $userTypeResult = $user->getUserTypeById($userResult[0]["user_type_iduser_type"]);
-  if ($userTypeResult[0]["name"] == "student") {
+  if ($userTypeResult[0]["name"] == "admin") {
+    // Redirect to admin panel
+    header("Location: ./admin_panel.php");
+    exit;
+  } else if ($userTypeResult[0]["name"] == "student") {
     $userType = "Student";
   } else if ($userTypeResult[0]["name"] == "lecturer") {
     $userType = "Foreleser";
+  } else {
+    $userType = "N/A";
   }
 }
 ?>
