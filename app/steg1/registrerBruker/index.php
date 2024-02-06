@@ -3,7 +3,10 @@
 session_start();
 
 if (! isset($_GET["type"])) {
-    header("Location: registrer.php?type=0");
+    header("Location: ./?type=0");
+    exit;
+} else if (! ($_GET["type"] == 0 || $_GET["type"] == 1)) {
+    header("Location: ./?type=0");
     exit;
 }
 ?>
@@ -123,8 +126,6 @@ if (! isset($_GET["type"])) {
     <?php
         unset($_SESSION["errorMessage"]);
     }
-
-    # <button class="tablinks active" onclick="openTab(event, 'student')">Student</button>
     ?>
 
     <div class="tab">
@@ -136,7 +137,7 @@ if (! isset($_GET["type"])) {
     if (isset($_GET["type"]) && $_GET["type"] == "0") {
     ?>
         <div id="student" class="tabcontent">
-            <form action="registrer-action.php" method="post" class="customForm">
+            <form action="action.php" method="post" class="customForm">
                 <label>Fornavn:</label>
                 <input type="text" id="first_name" name="first_name" required><br><br>
                 <label>Etternavn:</label>
@@ -154,7 +155,7 @@ if (! isset($_GET["type"])) {
     } else if (isset($_GET["type"]) && $_GET["type"] == "1") {
     ?>
         <div id="foreleser" class="tabcontent">
-            <form action="registrer-action.php" method="post" class="customForm" enctype="multipart/form-data">
+            <form action="action.php" method="post" class="customForm" enctype="multipart/form-data">
                 <label>Fornavn:</label>
                 <input type="text" id="first_name" name="first_name" required><br><br>
                 <label>Etternavn:</label>

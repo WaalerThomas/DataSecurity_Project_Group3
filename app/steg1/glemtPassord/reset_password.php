@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/class/PasswordToken.php";
+require_once __DIR__ . "/../dbClasses/PasswordToken.php";
 
 /**
  * Isset email key validate
@@ -16,7 +16,7 @@ if (isset($_GET["key"]) && isset($_GET["email"]) && isset($_GET["action"])
         <p>Linken er ugyldig/utløpt. Enten kopierte du ikke den riktige lenken
         fra e-posten, eller du har allerede brukt nøkkelen i så fall
         så er den deaktivert.</p>
-        <p><a href="./glemt_passord.php">
+        <p><a href="./">
         Klikk her</a> for å resette passord.</p>';
     } else {
         $expDate = $tokenResult[0]["expDate"];
@@ -50,7 +50,7 @@ if (isset($_GET["key"]) && isset($_GET["email"]) && isset($_GET["action"])
  * Isset email action post
  */
 if (isset($_POST["email"]) && isset($_POST["action"]) && ($_POST["action"] == "update")) {
-    require_once __DIR__ . "/class/User.php";
+    require_once __DIR__ . "/../dbClasses/User.php";
 
     $error = "";
 
@@ -67,7 +67,7 @@ if (isset($_POST["email"]) && isset($_POST["action"]) && ($_POST["action"] == "u
         $passToken = new PasswordToken();
         $passToken->removeEntry($_POST["email"]);
 
-        echo '<div class="error"><p>Gratulerer! Passordet ditt har blitt oppdatert.</p><p><a href="./login.php">Klikk her</a> for å logge inn.</p></div><br />';
+        echo '<div class="error"><p>Gratulerer! Passordet ditt har blitt oppdatert.</p><p><a href="../login">Klikk her</a> for å logge inn.</p></div><br />';
     }
 }
 ?>

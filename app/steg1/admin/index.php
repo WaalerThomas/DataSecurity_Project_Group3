@@ -4,23 +4,23 @@ session_start();
 
 // Check if they are logged in or not
 if (empty($_SESSION["userId"])) {
-    header("Location: ./");
+    header("Location: ../");
     exit;
 }
 
-require_once __DIR__ . "/class/User.php";
+require_once __DIR__ . "/../dbClasses/User.php";
 $user = new User();
 $userResult = $user->getUserById($_SESSION["userId"]);
 if (! $userResult) {
     unset($_SESSION["userId"]);
-    header("Location: ./");
+    header("Location: ../");
     exit;
 }
 
 // Check that the user logged in is an admin
 $userTypeResult = $user->getUserTypeById($userResult[0]["user_type_iduser_type"]);
 if ($userTypeResult[0]["name"] != "admin") {
-    header("Location: ./");
+    header("Location: ../");
     exit;
 }
 ?>
@@ -34,6 +34,6 @@ if ($userTypeResult[0]["name"] != "admin") {
 </head>
 <body>
     <h1>Admin Panel</h1>
-    <a href="logout.php">Logg ut</a>
+    <a href="../logout.php">Logg ut</a>
 </body>
 </html>

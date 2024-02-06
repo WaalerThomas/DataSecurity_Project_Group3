@@ -3,7 +3,7 @@
 
 
 function checkProfilePictures() {
-    $target_dir = "uploads/";
+    $target_dir = "../uploads/";
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
@@ -74,18 +74,37 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
 
     # If errors then send back to page with error messages
     if (! empty($_SESSION["errorMessage"])) {
-        header("Location: registrer.php?type=" . $userType);
+        header("Location: ./?type=" . $userType);
         exit;
     }
 
+    // TODO: Start transaction
+    require_once __DIR__ . "/../dbClasses/DataSource.php";
+    $ds = new DataSource();
+    $ds->startTransaction();
+
     # Send request to database
-    require_once __DIR__ . "/class/User.php";
-    $user = new User();
+    require_once __DIR__ . "/../dbClasses/User.php";
+    $user = new User($ds);
     $isCreated = $user->createUser();
     if (! $isCreated) {
         $_SESSION["errorMessage"] = "Feilet under oppretting av bruker";
-        header("Location: registrer.php?type=" . $userType);
+        $ds->rollbackTransaction();
+        header("Location: ./?type=" . $userType);
         exit;
+    }
+
+    // Now create the subject if it is a lecturer
+    if (! empty($_POST["registrer_foreleser"])) {
+        require_once __DIR__ . "/../dbClasses/Course.php";
+        $course = new Course($ds);
+        $isCourseCreated = $course->createCourse($_SESSION["userId"]);
+        if (! $isCourseCreated) {
+            $_SESSION["errorMessage"] = "Feilet under oppretting av emne";
+            $ds->rollbackTransaction();
+            header("Location: ./?type=" . $userType);
+            exit;
+        }
     }
 
     // Save the profile picture now that the user is created
@@ -93,23 +112,15 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
         $target_file = $profResult[1];
         if (! move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
             $_SESSION["errorMessage"] .= "Sorry, there was an error uploading your file.";
-            header("Location: registrer.php?type=" . $userType);
+            $ds->rollbackTransaction();
+            header("Location: ./?type=" . $userType);
             exit;
         }
     }
 
-    // Now create the subject if it is a lecturer
-    if (! empty($_POST["registrer_foreleser"])) {
-        require_once __DIR__ . "/class/Course.php";
-        $course = new Course();
-        $isCourseCreated = $course->createCourse($_SESSION["userId"]);
-        if (! $isCourseCreated) {
-            $_SESSION["errorMessage"] = "Feilet under oppretting av emne";
-            header("Location: registrer.php?type=" . $userType);
-            exit;
-        }
-    }
+    // TODO: Commit transaction
+    $ds->commitTransaction();
     
-    header("Location: ./");
+    header("Location: ../");
 }
 ?>

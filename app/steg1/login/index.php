@@ -6,9 +6,9 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-<title>Glemt Passord?</title>
+<title>Login</title>
 <style>
-    .custom_form {
+    .login_form {
         display: inline-block;
         position: absolute;
         left: 50%;
@@ -23,9 +23,7 @@ session_start();
 </head>
 <body>
 
-<div class="custom_form">
-    <h2>Oppgi din e-post adresse</h2>
-
+<div class="login_form">
     <?php
     if (isset($_SESSION["errorMessage"])) {
     ?>
@@ -35,11 +33,17 @@ session_start();
     }
     ?>
 
-    <form action="glemt_passord-action.php" method="post">
-        <label>E-post:</label>
+    <form action="action.php" method="post">
+        <label>E-mail:</label>
         <input type="email" id="email" name="email" required><br><br>
-        <input type="submit" value="Send" name="forgot_pass">
+        <label>Passord:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" name="login" value="submit">
     </form>
+
+    <br>
+
+    <a href="../glemtPassord/">Glemt passord?</a>
 </div>
 
 </body>

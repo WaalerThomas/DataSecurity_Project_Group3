@@ -7,7 +7,7 @@ $userType = "";
 
 // Populate "global" variables if someone is logged in
 if (! empty($_SESSION["userId"])) {
-  require_once __DIR__ . "/class/User.php";
+  require_once __DIR__ . "/dbClasses/User.php";
   $user = new User();
   $userResult = $user->getUserById($_SESSION["userId"]);
   if (! $userResult) {
@@ -21,7 +21,7 @@ if (! empty($_SESSION["userId"])) {
   $userTypeResult = $user->getUserTypeById($userResult[0]["user_type_iduser_type"]);
   if ($userTypeResult[0]["name"] == "admin") {
     // Redirect to admin panel
-    header("Location: ./admin_panel.php");
+    header("Location: ./admin");
     exit;
   } else if ($userTypeResult[0]["name"] == "student") {
     $userType = "Student";
@@ -200,12 +200,12 @@ if (! empty($_SESSION["userId"])) {
   ?>
     <span><?php echo $displayName . " - " . $userType; ?></span>
     <a href="logout.php">Logg ut</a>
-    <a href="bytte_passord.php">Bytte passord</a>
+    <a href="byttePassord/">Bytte passord</a>
   <?php
   } else {
   ?>
-    <a href="registrer.php" >Registrer</a>
-    <a href="login.php">Logg inn</a>
+    <a href="registrerBruker/" >Registrer</a>
+    <a href="login/">Logg inn</a>
   <?php
   }
   ?>
@@ -230,16 +230,21 @@ if (! empty($_SESSION["userId"])) {
       <button id="button" onclick="handleButtonClick()">Send</button> 
     </div>
   </div>
-
-  <?php 
-        echo $_POST["pin"]
-    ?>
   
   <div class="column side">
     <label>Choose a course:</label>
       <select>
-        <option value="dataingeniør">Ingeniørfag, Data</option>
-        <option value="informasjonssystemer">Informasjonssystemer</option>
+        <?php
+        // Get all courses
+        require_once __DIR__ . "/dbClasses/Course.php";
+        $course = new Course();
+        $courseResult = $course->getAllCourses();
+        if ($courseResult) {
+          foreach ($courseResult as $c) {
+            echo '<option value="' . $c["idcourses"] . '">' . $c["name"] . '</option>';
+          }
+        }
+        ?>
       </select>
     <h2>Emnesøk</h2>
     <?php
@@ -260,12 +265,6 @@ if (! empty($_SESSION["userId"])) {
     </form>
   </div>
 </div>
-
-<?php 
-/* Note: Validate "emnekode" with pin and so on */
-/* Note: generate the said "emne" in "column middle" */
-
-?>
 
 <script>
 

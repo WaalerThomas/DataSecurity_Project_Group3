@@ -5,8 +5,8 @@
 
 /* Note: Check that a used with that mail exists */
 /* Note: Send mail to user with token link thingy */
-require_once __DIR__ . "/class/User.php";
-require_once __DIR__ . "/class/PasswordToken.php";
+require_once __DIR__ . "/../dbClasses/User.php";
+require_once __DIR__ . "/../dbClasses/PasswordToken.php";
 
 session_start();
 
@@ -30,7 +30,7 @@ if (! empty($_POST["email"])) {
 
     // If errors then send back to page with error message
     if (! empty($_SESSION["errorMessage"])) {
-        header("Location: glemt_passord.php");
+        header("Location: ./");
         exit;
     }
 
@@ -46,7 +46,7 @@ if (! empty($_POST["email"])) {
     $isCreated = $passToken->createPasswordResetToken($email, $key, $expDate);
     if (! $isCreated) {
         $_SESSION["errorMessage"] .= "Feilet under oppretting av token. ";
-        header("Location: glemt_passord.php");
+        header("Location: ./");
         exit;
     }
 
