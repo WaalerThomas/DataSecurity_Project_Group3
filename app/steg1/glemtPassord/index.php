@@ -35,7 +35,7 @@ session_start();
     }
     ?>
 
-    <form action="glemt_passord-action.php" method="post">
+    <form action="action.php" method="post">
         <label>E-post:</label>
         <input type="email" id="email" name="email" required><br><br>
         <input type="submit" value="Send" name="forgot_pass">
