@@ -99,13 +99,15 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
     }
 
     // Now create the subject if it is a lecturer
-    require_once __DIR__ . "/class/Course.php";
-    $course = new Course();
-    $isCourseCreated = $course->createCourse($_SESSION["userId"]);
-    if (! $isCourseCreated) {
-        $_SESSION["errorMessage"] = "Feilet under oppretting av emne";
-        header("Location: registrer.php?type=" . $userType);
-        exit;
+    if (! empty($_POST["registrer_foreleser"])) {
+        require_once __DIR__ . "/class/Course.php";
+        $course = new Course();
+        $isCourseCreated = $course->createCourse($_SESSION["userId"]);
+        if (! $isCourseCreated) {
+            $_SESSION["errorMessage"] = "Feilet under oppretting av emne";
+            header("Location: registrer.php?type=" . $userType);
+            exit;
+        }
     }
     
     header("Location: ./");
