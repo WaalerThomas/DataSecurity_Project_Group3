@@ -33,7 +33,7 @@ session_start();
     }
     ?>
 
-    <form action="login-action.php" method="post">
+    <form action="action.php" method="post">
         <label>E-mail:</label>
         <input type="email" id="email" name="email" required><br><br>
         <label>Passord:</label>
@@ -43,7 +43,7 @@ session_start();
 
     <br>
 
-    <a href="glemt_passord.php">Glemt passord?</a>
+    <a href="../glemtPassord/">Glemt passord?</a>
 </div>
 
 </body>
