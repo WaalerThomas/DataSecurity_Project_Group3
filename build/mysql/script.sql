@@ -164,6 +164,20 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- -----------------------------------------------------
+-- Data for table `users`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `datasec_db`;
+INSERT INTO `users` (`first_name`, `last_name`, `password`, `email`, `picture`, `user_type_iduser_type`)
+VALUES ('Admin', 'Admin', '$2y$10$QuEY/hEkZ5nvlE2Zvc.MReB.uxHehvh6vNmUNCSYROPWjSeRHQc1.', 'admin@company.no', NULL, (
+  SELECT `iduser_type`
+  FROM `user_type`
+  WHERE `name` = 'admin'
+));
+
+COMMIT;
+
+-- -----------------------------------------------------
 -- Data for table `courses`
 -- -----------------------------------------------------
 START TRANSACTION;
@@ -186,18 +200,5 @@ INSERT INTO `user_type` (`iduser_type`, `name`) VALUES (3, 'admin');
 COMMIT;
 
 
--- -----------------------------------------------------
--- Data for table `users`
--- -----------------------------------------------------
-START TRANSACTION;
-USE `datasec_db`;
-INSERT INTO `users` (`first_name`, `last_name`, `password`, `email`, `picture`, `user_type_iduser_type`)
-VALUES ('Admin', 'Admin', '$2y$10$QuEY/hEkZ5nvlE2Zvc.MReB.uxHehvh6vNmUNCSYROPWjSeRHQc1.', 'admin@company.no', NULL, (
-  SELECT `iduser_type`
-  FROM `user_type`
-  WHERE `name` = 'admin'
-));
--- INSERT INTO `users` (`iduser`, `first_name`, `last_name`, `password`, `email`, `picture`, `user_type_iduser_type`) VALUES (1, 'Tobias', 'Sommervold', DEFAULT, 'tobiasws@hiof.no', NULL, DEFAULT);
 
-COMMIT;
 

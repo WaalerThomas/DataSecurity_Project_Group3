@@ -28,9 +28,10 @@ if (isset($_POST['send_comment']) && isset($_POST['course_name']) && isset($_POS
         exit;
     }
 
+    require_once __DIR__ . "/dbClasses/Course.php";
+    $course = new Course();
+
     if (isset($_SESSION['userId'])) {
-        require_once __DIR__ . "/dbClasses/Course.php";
-        $course = new Course();
         $courseResult = $course->getCourseByName($_POST['course_name']);
 
         // Check if it is the lecturer that is answering
@@ -46,11 +47,33 @@ if (isset($_POST['send_comment']) && isset($_POST['course_name']) && isset($_POS
             exit;
         }
     }
-    
-    $msg_index = (int)$_POST['msg_index'];
-    $commentResult = $message->createComment($_POST['answer-textbox'], $messageResult[$msg_index]['idmessages']);
-    if (! $commentResult) {
-        $_SESSION["errorMessage"] .= "Feilet under oppretting av melding. ";
+
+    // Check if they have access to comment
+    if (isset($_SESSION['userId']) || (isset($_SESSION['access_hash']) && !empty($_SESSION['access_hash'])) ) {
+        // Validate the hash
+        if (isset($_SESSION['access_hash'])) {
+            $courseResult = $course->getCourseByName($_POST['course_name']);
+            if (! $courseResult) {
+                $_SESSION['errorMessage'] .= "Ugyldig emnenavn oppgitt. ";
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            }
+
+            $trueHash = md5($courseResult[0]['pin'] . "emneCourseSaltyBabeThingy" . $_POST['course_name']);
+            if ($trueHash != $_SESSION['access_hash']) {
+                $_SESSION['errorMessage'] .= "Hashen samsvarer ikke. ";
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            }
+        }
+        // Hash is valid if it gets here
+        
+        // It is a student or a guest user that is commenting
+        $msg_index = (int)$_POST['msg_index'];
+        $commentResult = $message->createComment($_POST['answer-textbox'], $messageResult[$msg_index]['idmessages']);
+        if (! $commentResult) {
+            $_SESSION["errorMessage"] .= "Feilet under oppretting av melding. ";
+        }
     }
 
     header('Location: ' . $_SERVER['HTTP_REFERER']);

@@ -7,7 +7,9 @@ function checkProfilePictures() {
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-    $target_file = $target_dir . $_POST["email"] . "." . $imageFileType;
+    //$target_file = $target_dir . $_POST["email"] . "." . $imageFileType;
+    $target_file = $target_dir . basename($_FILES['fileToUpload']['tmp_name']) . "." . $imageFileType;
+    
     // Check if image file is an actual image or fake image
     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
     if ($check == false) {
@@ -68,7 +70,8 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
         if ($profResult[0] == 0) {
             $_SESSION["errorMessage"] .= "Sorry, your file was not uploaded. ";
         } else {
-            $_POST["profile_path"] = $profResult[1];   
+            // Removes the first dots in the filepath
+            $_POST["profile_path"] = ltrim($profResult[1], '.');
         }
     }
 

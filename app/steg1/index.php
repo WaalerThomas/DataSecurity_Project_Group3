@@ -31,6 +31,10 @@ if (! empty($_SESSION["userId"])) {
         $userType = "N/A";
     }
 }
+
+if (isset($_GET['hash'])) {
+    $_SESSION['access_hash'] = $_GET['hash'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -377,12 +381,12 @@ if (! empty($_SESSION["userId"])) {
             </div>
 
             <aside class="emneansvarlig">
-                <img src="https://placehold.co/100x100.png"></img>
+                <?php  echo '<img width="100" height="100" src="./'.$lectResult[0]['picture'].'" />'; ?>
                 <h3 class="teachername"><?php echo $lectResult[0]['first_name'] . " " . $lectResult[0]['last_name']; ?></h3>
             </aside>
             </div>
             <?php
-            if ($userType != "Foreleser") {
+            if ($userType == "Student") {
                 ?>
                 <div id="send-comment">
                     <form action="message-action.php" method="post">
