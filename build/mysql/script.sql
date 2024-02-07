@@ -164,6 +164,17 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- -----------------------------------------------------
+-- Data for table `user_type`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `datasec_db`;
+INSERT INTO `user_type` (`iduser_type`, `name`) VALUES (1, 'student');
+INSERT INTO `user_type` (`iduser_type`, `name`) VALUES (2, 'lecturer');
+INSERT INTO `user_type` (`iduser_type`, `name`) VALUES (3, 'admin');
+
+COMMIT;
+
+-- -----------------------------------------------------
 -- Data for table `users`
 -- -----------------------------------------------------
 START TRANSACTION;
@@ -176,29 +187,3 @@ VALUES ('Admin', 'Admin', '$2y$10$QuEY/hEkZ5nvlE2Zvc.MReB.uxHehvh6vNmUNCSYROPWjS
 ));
 
 COMMIT;
-
--- -----------------------------------------------------
--- Data for table `courses`
--- -----------------------------------------------------
-START TRANSACTION;
-USE `datasec_db`;
--- INSERT INTO `courses` (`idcourses`, `name`, `users_iduser`) VALUES (1, 'Ingeniørfag, data', DEFAULT);
--- INSERT INTO `courses` (`idcourses`, `name`, `users_iduser`) VALUES (2, 'Informasjonssystemer', DEFAULT);
-
-COMMIT;
-
-
--- -----------------------------------------------------
--- Data for table `user_type`
--- -----------------------------------------------------
-START TRANSACTION;
-USE `datasec_db`;
-INSERT INTO `user_type` (`iduser_type`, `name`) VALUES (1, 'student');
-INSERT INTO `user_type` (`iduser_type`, `name`) VALUES (2, 'lecturer');
-INSERT INTO `user_type` (`iduser_type`, `name`) VALUES (3, 'admin');
-
-COMMIT;
-
-
-
-
