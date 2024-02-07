@@ -39,10 +39,7 @@ if (isset($_POST['send_comment']) && isset($_POST['course_name']) && isset($_POS
             $msg_index = (int)$_POST['msg_index'];
             $msgId = $messageResult[$msg_index]['idmessages'];
             $msgResult = $message->addAnswer($msgId, $_POST['answer-textbox']);
-            if (! $msgResult) {
-                $_SESSION["errorMessage"] .= "Feilet under oppdatering av meldings svar. ";    
-            }
-
+            
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit;
         }
