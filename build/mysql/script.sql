@@ -27,7 +27,7 @@ DROP TABLE IF EXISTS `comments` ;
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `comments` (
   `idcomments` INT NOT NULL AUTO_INCREMENT,
-  `comment` VARCHAR(45) NULL,
+  `comment` VARCHAR(255) NULL,
   `messages_idmessages` INT NOT NULL,
   PRIMARY KEY (`idcomments`))
 ENGINE = InnoDB;

@@ -1,6 +1,6 @@
 <?php
 // TODO: Check that the "logic" works XD
-
+// For fixing my permission denied problem when saving pictures: https://stackoverflow.com/questions/8103860/move-uploaded-file-gives-failed-to-open-stream-permission-denied-error
 
 function checkProfilePictures() {
     $target_dir = "../uploads/";

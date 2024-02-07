@@ -9,11 +9,11 @@
 
 <h1>Dokumentasjon</h1>
 <h2>Medlemmer</h2>
-<p>Jonas Emil Høgseth - </p>
+<p>Jonas Emil Høgseth - jonaseh@hiof.no</p>
 <p>Thomas Kinn - </p>
-<p>Tobias William Sommervold - </p>
+<p>Tobias William Sommervold - tobiasws@hiof.no</p>
 <p>Thomas Waaler - thomaswa@hiof.no</p>
-<p>Petter Viktor Åmot - </p>
+<p>Petter Viktor Åmot - petterva@hiof.no</p>
 
 <h2>Hva har blitt gjort</h2>
 <p>

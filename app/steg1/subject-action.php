@@ -11,7 +11,6 @@ if (! empty($_POST["emnekode"]) && ! empty($_POST["pin"])) {
     $courseResult = $course->isPinValid($_POST["emnekode"], $_POST["pin"]);
     
     if ($courseResult == 1) {
-        $_SESSION["errorMessage"] = "Nice, message redirect has to be implemented";
         $hash = md5($_POST['pin'] . "emneCourseSaltyBabeThingy" . $_POST['emnekode']);
         header("Location: ./?course=".$_POST['emnekode']."&hash=".$hash);
         /*Need to add OPEN COURSE */

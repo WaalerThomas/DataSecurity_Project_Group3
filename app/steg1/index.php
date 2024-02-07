@@ -173,6 +173,9 @@ if (! empty($_SESSION["userId"])) {
     .info_msg {
         color: #7a7a7a;
     }
+    .status_msg {
+        color: #218c00;
+    }
 
     .answer-textbox {
         margin-top: 4px;
@@ -193,6 +196,10 @@ if (! empty($_SESSION["userId"])) {
     .comment-top{
         display: flex;
         align-items: center;
+    }
+
+    .lecturer-answer {
+        background: darkseagreen;
     }
 
 </style>
@@ -217,6 +224,23 @@ if (! empty($_SESSION["userId"])) {
 <div class="row">
     <div class="column middle">
         <?php
+        // Display error produced from the action script on the form
+        if (isset($_SESSION["errorMessage"])) {
+        ?>
+            <div class="error_msg"><?php  echo $_SESSION["errorMessage"]; ?></div>
+        <?php
+            unset($_SESSION["errorMessage"]);
+        }
+
+        if (isset($_SESSION['status_message'])) {
+            ?>
+            <div class="status_msg"><?php echo $_SESSION['status_message']; ?></div>
+            <?php
+            unset($_SESSION['status_message']);
+        }
+        ?>
+
+        <?php
         $canDisplayCourse = 0;
         $courseData = null;
 
@@ -231,8 +255,6 @@ if (! empty($_SESSION["userId"])) {
                 $courseData = $courseResult;
                 $canDisplayCourse = 1;
             }
-        } else {
-            echo '<div class="info_msg">Venligst velg et emne ...</div>';
         }
 
         // Guest user is requesting to see the course's messages
@@ -289,6 +311,69 @@ if (! empty($_SESSION["userId"])) {
             <div class="info">
 
             <div id="commentsection">
+            <?php
+            // Generate the comment section
+            require_once __DIR__ . "/dbClasses/Message.php";
+            $msgObject = new Message();
+            $msgResult = $msgObject->getAllCourseMessages($courseData[0]['name']);
+            if (! $msgResult) {
+                $msgResult = array();
+            }
+            $msg_index = 0;
+            foreach ($msgResult as $msg) {
+                ?>
+                <div>
+                    <div class="comment-info">
+                        <div class="comment-top">
+                            <p class="username-comment">Spørsmål</p>
+                            <form action="report-action.php" method="post">
+                                <input type="hidden" id="course_name" name="course_name" value<?php echo '="'.$courseData[0]['name'].'"' ?>></input>
+                                <input type="hidden" id="msg_index" name="msg_index" value<?php echo '="'.$msg_index.'"' ?>></input>
+                                <input type="submit" class="report-button" value="Rapporter" name="report_message">
+                            </form>
+                        </div>
+                    </div>
+                    <p class="comment"><?php echo $msg['question']; ?></p>
+                    <?php
+                    if ($msg['answer']) {
+                        ?>
+                        <div class="lecturer-answer">
+                            <p class="username-answer">Foreleser</p>
+                            <p class="answer"><?php echo $msg['answer']; ?></p>
+                        </div>
+                        <?php
+                    }
+
+                    // Get all the comments for this message
+                    $commentResult = $msgObject->getAllComments($msg['idmessages']);
+                    if (! $commentResult) {
+                        $commentResult = array();
+                    }
+                    foreach ($commentResult as $com) {
+                        ?>
+                        <div class="comment-info">
+                            <p class="username-answer">Svar</p>
+                            <p class="answer"><?php echo $com['comment']; ?></p>
+                        </div>
+                        <?php
+                    }
+
+                    if ( ($userType == "Foreleser" && empty($msg['answer'])) || $userType != "Foreleser") {
+                        ?>
+                        <form action="message-action.php" method="post">
+                            <input type="hidden" id="course_name" name="course_name" value<?php echo '="'.$courseData[0]['name'].'"' ?>></input>
+                            <input type="hidden" id="msg_index" name="msg_index" value<?php echo '="'.$msg_index.'"' ?>></input>
+                            <input class="answer-textbox" type="text" name="answer-textbox" id="answer-textbox" placeholder="Skriv et svar...">
+                            <input type="submit" value="Send svar" name="send_comment">
+                        </form>
+                        <?php
+                    }
+                    ?>
+                </div>
+                <?php
+                $msg_index++;
+            }
+            ?>
             </div>
 
             <aside class="emneansvarlig">
@@ -296,11 +381,20 @@ if (! empty($_SESSION["userId"])) {
                 <h3 class="teachername"><?php echo $lectResult[0]['first_name'] . " " . $lectResult[0]['last_name']; ?></h3>
             </aside>
             </div>
-            <div id="send-comment">
-                <input type="text" id="new-comment" placeholder="Skriv en kommentar...">
-                <button id="button" onclick="handleButtonClick()">Send</button> 
-            </div>
             <?php
+            if ($userType != "Foreleser") {
+                ?>
+                <div id="send-comment">
+                    <form action="message-action.php" method="post">
+                        <input type="hidden" id="course_name" name="course_name" value<?php echo '="'.$courseData[0]['name'].'"' ?>></input>
+                        <input type="text" id="new-comment" name="new-comment" placeholder="Skriv en kommentar...">
+                        <input type="submit" value="Send" name="send_message">
+                    </form>
+                </div>
+                <?php
+            }
+        } else {
+            echo '<div class="info_msg">Vennligst velg et emne ...</div>';
         }
         ?>
     </div>
@@ -329,15 +423,6 @@ if (! empty($_SESSION["userId"])) {
         else if (empty($_SESSION['userId'])) {
             ?>
             <h2>Emnesøk</h2>
-            <?php
-            // Display error produced from the action script on the form
-            if (isset($_SESSION["errorMessage"])) {
-            ?>
-                <div class="error_msg"><?php  echo $_SESSION["errorMessage"]; ?></div>
-            <?php
-                unset($_SESSION["errorMessage"]);
-            }
-            ?>
             <form action="subject-action.php" method="post">
                 <label>Emnekode:</label>
                 <input type="text" id="emnekode" name="emnekode" required><br><br>
@@ -352,8 +437,7 @@ if (! empty($_SESSION["userId"])) {
 </div>
 
 <script>
-
-  var id = 0;
+    var id = 0;
 
     function changeCourse() {
         var course = document.getElementById("courseChanger").value;
