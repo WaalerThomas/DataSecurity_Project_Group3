@@ -8,12 +8,11 @@ require_once __DIR__ . "/dbClasses/Course.php";
 if (! empty($_POST["emnekode"]) && ! empty($_POST["pin"])) {
     # Check if the pin matches the course
     $course = new Course();
-    $coursepin = $course->isPinValid($_POST["emnekode"], $_POST["pin"]);
+    $courseResult = $course->isPinValid($_POST["emnekode"], $_POST["pin"]);
     
-        
-    if ($coursepin == 1) {
-        header("Location: ./");
+    if ($courseResult == 1) {
         $_SESSION["errorMessage"] = "Nice, message redirect has to be implemented";
+        header("Location: ./");
         /*Need to add OPEN COURSE */
         exit;
     }

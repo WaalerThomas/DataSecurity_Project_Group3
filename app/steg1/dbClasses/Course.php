@@ -45,11 +45,15 @@ class Course
         return $courseResult;
     }
 
-    function isPinValid($emnekodeResult, $pinResult) {
+    function isPinValid($courseName, $pin) {
         $courseResult = 0;
-        $emnekode = $this->getCourseByName($emnekodeResult);
-        $realPin = $emnekode[0]["pin"];
-        if ($pinResult == $realPin) {
+        $course = $this->getCourseByName($courseName);
+        if (! $course) {
+            return $courseResult;
+        }
+
+        $realPin = $course[0]["pin"];
+        if ($pin == $realPin) {
             $courseResult = 1;
         }
 
