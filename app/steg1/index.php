@@ -170,6 +170,9 @@ if (! empty($_SESSION["userId"])) {
     .error_msg {
         color: red;
     }
+    .info_msg {
+        color: #7a7a7a;
+    }
 
     .answer-textbox {
         margin-top: 4px;
@@ -212,31 +215,103 @@ if (! empty($_SESSION["userId"])) {
 </div>
 
 <div class="row">
-  <div class="column middle">
-    <section class="emneinfo">
-      <h3>Emnekode</h3>
-      <h3>Emnenavn</h3>
-    </section>
-    <div class="info">
-      <div id="commentsection">
-      </div>
-      <aside class="emneansvarlig">
-        <img src="https://placehold.co/100x100.png"></img>
-        <h3 class="teachername">Emneansvarlig</h3>
-      </aside>      
+    <div class="column middle">
+        <?php
+        $canDisplayCourse = 0;
+        $courseData = null;
+
+        // Check for logged inn student
+        if (isset($_SESSION['userId']) && isset($_GET['course']) && $userType == "Student") {
+            require_once __DIR__ . "/dbClasses/Course.php";
+            $course = new Course();
+            $courseResult = $course->getCourseByName($_GET['course']);
+            if (! $courseResult) {
+                echo '<div class="error_msg">Ugyldig emnenavn oppgitt</div>';
+            } else {
+                $courseData = $courseResult;
+                $canDisplayCourse = 1;
+            }
+        } else {
+            echo '<div class="info_msg">Venligst velg et emne ...</div>';
+        }
+
+        // Guest user is requesting to see the course's messages
+        if (! isset($_SESSION['userId']) && isset($_GET['course']) && isset($_GET['hash'])) {
+            $courseName = $_GET['course'];
+            $hash = $_GET['hash'];
+
+            // Validate the hash
+            $isValidHash = 0;
+
+            require_once __DIR__ . "/dbClasses/Course.php";
+            $course = new Course();
+            $courseResult = $course->getCourseByName($courseName);
+            if (! $courseResult) {
+                echo '<div class="error_msg">Ugyldig emnenavn oppgitt</div>';
+            }
+            else {
+                $trueHash = md5($courseResult[0]['pin'] . "emneCourseSaltyBabeThingy" . $courseName);
+                if ($hash == $trueHash) {
+                    $canDisplayCourse = 1;
+                    $courseData = $courseResult;
+                } else {
+                    echo '<div class="error_msg">Hashen samsvarer ikke</div>';
+                }
+            }
+        }
+
+        // Check for lecturer
+        if (isset($_SESSION['userId']) && $userType == "Foreleser") {
+            require_once __DIR__ . "/dbClasses/Course.php";
+            $course = new Course();
+            $courseResult = $course->getCourseByUserId($_SESSION['userId']);
+            if (! $courseResult) {
+                echo '<div class="error_msg">Finner ingen emner som tilhører deg. Dette skal ikke være mulig :/</div>';
+            } else {
+                $courseData = $courseResult;
+                $canDisplayCourse = 1;
+            }
+        }
+
+        
+        if ($courseData != null) {
+            require_once __DIR__ . "/dbClasses/User.php";
+            $lecturer = new User();
+            $lectResult = $lecturer->getUserById($courseData[0]['users_iduser']);
+            if (! $lectResult) {
+                echo '<div class="error_msg">Feilet under henting av foreleser navn</div>';
+            }
+
+            ?>
+            <section class="emneinfo">
+                <h3>Emne: <?php echo $courseData[0]['name']; ?></h3>
+            </section>
+            <div class="info">
+
+            <div id="commentsection">
+            </div>
+
+            <aside class="emneansvarlig">
+                <img src="https://placehold.co/100x100.png"></img>
+                <h3 class="teachername"><?php echo $lectResult[0]['first_name'] . " " . $lectResult[0]['last_name']; ?></h3>
+            </aside>
+            </div>
+            <div id="send-comment">
+                <input type="text" id="new-comment" placeholder="Skriv en kommentar...">
+                <button id="button" onclick="handleButtonClick()">Send</button> 
+            </div>
+            <?php
+        }
+        ?>
     </div>
-    <div id="send-comment">
-        <input type="text" id="new-comment" placeholder="Skriv en kommentar...">
-        <button id="button" onclick="handleButtonClick()">Send</button> 
-    </div>
-  </div>
   
     <div class="column side">
         <?php
         if ($userType == "Student") {
             ?>
             <label>Velg et emne:</label>
-            <select>
+            <select id="courseChanger" onchange="changeCourse()">
+                <option value="">Velg ...</option>
                 <?php
                 // Get all courses
                 require_once __DIR__ . "/dbClasses/Course.php";
@@ -244,7 +319,7 @@ if (! empty($_SESSION["userId"])) {
                 $courseResult = $course->getAllCourses();
                 if ($courseResult) {
                     foreach ($courseResult as $c) {
-                        echo '<option value="' . $c["idcourses"] . '">' . $c["name"] . '</option>';
+                        echo '<option value="' . $c["name"] . '">' . $c["name"] . '</option>';
                     }
                 }
                 ?>
@@ -280,58 +355,67 @@ if (! empty($_SESSION["userId"])) {
 
   var id = 0;
 
-  function handleButtonClick() {
-    id++;
-    var newComment = document.getElementById("new-comment").value;
+    function changeCourse() {
+        var course = document.getElementById("courseChanger").value;
+        if (course === "") {
+            return;
+        }
 
-    var newCommentDiv = document.createElement("div");
-    newCommentDiv.classList.add(`comment-${id}`);
+        window.location.href = "?course=" + course;
+    }
 
-    var newCommentInfoDiv = document.createElement("div");
-    newCommentInfoDiv.classList.add("comment-info");
+    function handleButtonClick() {
+        id++;
+        var newComment = document.getElementById("new-comment").value;
 
-    var newCommentTopDiv = document.createElement("div");
-    newCommentTopDiv.classList.add("comment-top");
+        var newCommentDiv = document.createElement("div");
+        newCommentDiv.classList.add(`comment-${id}`);
 
-    var newUsernameParagraph = document.createElement("p");
-    newUsernameParagraph.classList.add("username-comment");
-    newUsernameParagraph.textContent = "Spørsmål";
+        var newCommentInfoDiv = document.createElement("div");
+        newCommentInfoDiv.classList.add("comment-info");
 
-    var reportButton = document.createElement("button");
-    reportButton.classList.add("report-button");
-    reportButton.textContent = "Rapporter";
-    reportButton.onclick = function () {
-      alert("Kommentar rapportert!");
-    };
+        var newCommentTopDiv = document.createElement("div");
+        newCommentTopDiv.classList.add("comment-top");
 
-    var newCommentParagraph = document.createElement("p");
-    newCommentParagraph.classList.add("comment");
-    newCommentParagraph.textContent = newComment;
+        var newUsernameParagraph = document.createElement("p");
+        newUsernameParagraph.classList.add("username-comment");
+        newUsernameParagraph.textContent = "Spørsmål";
 
-    var answerTextbox = document.createElement("input");
-    answerTextbox.setAttribute("type", "text");
-    answerTextbox.setAttribute("placeholder", "Skriv et svar...");
-    answerTextbox.classList.add("answer-textbox");
+        var reportButton = document.createElement("button");
+        reportButton.classList.add("report-button");
+        reportButton.textContent = "Rapporter";
+        reportButton.onclick = function () {
+            alert("Kommentar rapportert!");
+        };
 
-    var answerButton = document.createElement("button");
-    answerButton.classList.add("answer-button");
-    answerButton.textContent = "Send svar";
-    answerButton.onclick = function () {
-        handleAnswerButtonClick(newCommentDiv);
-    };
+        var newCommentParagraph = document.createElement("p");
+        newCommentParagraph.classList.add("comment");
+        newCommentParagraph.textContent = newComment;
 
-    newCommentInfoDiv.appendChild(newCommentTopDiv);
-    newCommentTopDiv.appendChild(newUsernameParagraph);
-    newCommentTopDiv.appendChild(reportButton);
-    
+        var answerTextbox = document.createElement("input");
+        answerTextbox.setAttribute("type", "text");
+        answerTextbox.setAttribute("placeholder", "Skriv et svar...");
+        answerTextbox.classList.add("answer-textbox");
 
-    newCommentDiv.appendChild(newCommentInfoDiv);
-    newCommentDiv.appendChild(newCommentParagraph);
-    newCommentDiv.appendChild(answerTextbox);
-    newCommentDiv.appendChild(answerButton);
-    
-    document.getElementById("commentsection").appendChild(newCommentDiv);
-}
+        var answerButton = document.createElement("button");
+        answerButton.classList.add("answer-button");
+        answerButton.textContent = "Send svar";
+        answerButton.onclick = function () {
+            handleAnswerButtonClick(newCommentDiv);
+        };
+
+        newCommentInfoDiv.appendChild(newCommentTopDiv);
+        newCommentTopDiv.appendChild(newUsernameParagraph);
+        newCommentTopDiv.appendChild(reportButton);
+        
+
+        newCommentDiv.appendChild(newCommentInfoDiv);
+        newCommentDiv.appendChild(newCommentParagraph);
+        newCommentDiv.appendChild(answerTextbox);
+        newCommentDiv.appendChild(answerButton);
+        
+        document.getElementById("commentsection").appendChild(newCommentDiv);
+    }
 
 function handleAnswerButtonClick(commentDiv) {
     var newAnswer = commentDiv.querySelector(".answer-textbox").value;

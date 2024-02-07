@@ -33,6 +33,16 @@ class Course
         return $courseResult;
     }
 
+    function getCourseByUserId($userId) {
+        $query = "SELECT * FROM courses WHERE users_iduser = ?";
+        $paramType = "i";
+        $paramArray = array(
+            $userId
+        );
+        $courseResult = $this->ds->select($query, $paramType, $paramArray);
+        return $courseResult;
+    }
+
     function getAllCourses() {
         $query = "SELECT * FROM courses";
         $courseResult = $this->ds->select($query);
