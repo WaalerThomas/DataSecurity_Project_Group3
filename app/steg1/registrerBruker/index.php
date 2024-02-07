@@ -172,7 +172,7 @@ if (! isset($_GET["type"])) {
                 <label>Emnekode:</label>
                 <input type="text" id="emnekode" name="emnekode" required><br><br>
                 <label>Emnepin:</label>
-                <input type="text" id="emnepin" name="emnepin" required><br><br>
+                <input type="number" step="1" id="emnepin" name="emnepin" name="pin" min="0" max="9999" required><br><br>
                 <input type="submit" value="Submit" name="registrer_foreleser">
             </form>
         </div>
