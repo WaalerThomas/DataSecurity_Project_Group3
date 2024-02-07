@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../../dbClasses/Course.php";
+require_once __DIR__ . "/../tools.php";
 
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -10,6 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
      * Enpoint - /course
      */
     if (! isset($_GET['name'])) {
+        $sessionId = getSessionId();
+        $idUser = validateSessionId($sessionId);
+
         $courseResponse = $course->getAllCoursesInfo();
         $json_response = json_encode($courseResponse);
         echo $json_response;
@@ -20,6 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
      * Enpoint - /course?name={name}
      */
     if (! empty($_GET['name'])) {
+        $sessionId = getSessionId();
+        $idUser = validateSessionId($sessionId);
+
         // TODO: Validate name from GET
         $courseResponse = $course->getCourseByNameInfo($_GET['name']);
         $json_response = json_encode($courseResponse[0]);

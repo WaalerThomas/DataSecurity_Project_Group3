@@ -23,6 +23,16 @@ class APIToken
         return $tokenResult;
     }
 
+    function getSessionAccountId($session_id) {
+        $query = 'SELECT * FROM `api_sessions` WHERE `session_id` = ?';
+        $paramType = "s";
+        $paramArray = array(
+            $session_id
+        );
+        $tokenResult = $this->ds->select($query, $paramType, $paramArray);
+        return $tokenResult;
+    }
+
     function createToken($api_key, $auth_key, $expDate) {
         $query = 'INSERT INTO api_keys (api_key, auth_key, expDate)
         VALUES (?, ?, ?)';
