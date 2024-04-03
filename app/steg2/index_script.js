@@ -1,6 +1,7 @@
 var id = 0;
 
-function changeCourse() {
+var subjectBtn = document.getElementById("courseChanger");
+subjectBtn.onchange = function changeCourse() {
     var course = document.getElementById("courseChanger").value;
     if (course === "") {
         return;

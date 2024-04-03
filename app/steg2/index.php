@@ -245,7 +245,7 @@ if (isset($_GET['hash'])) {
         if ($userType == "Student") {
             ?>
             <label>Velg et emne:</label>
-            <select id="courseChanger" onchange="changeCourse()">
+            <select id="courseChanger">
                 <option value="">Velg ...</option>
                 <?php
                 // Get all courses
