@@ -12,12 +12,8 @@ if (empty($_SESSION["userId"])) {
 <!DOCTYPE html>
 <html>
 <head>
-<title>Bytte Passord</title>
-<style>
-    .error_msg {
-        color: red;
-    }
-</style>
+    <title>Bytte Passord</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 

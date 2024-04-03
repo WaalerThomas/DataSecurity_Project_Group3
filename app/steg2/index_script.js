@@ -1,13 +1,15 @@
 var id = 0;
 
 var subjectBtn = document.getElementById("courseChanger");
-subjectBtn.onchange = function changeCourse() {
-    var course = document.getElementById("courseChanger").value;
-    if (course === "") {
-        return;
+if (subjectBtn != null) {
+    subjectBtn.onchange = function changeCourse() {
+        var course = document.getElementById("courseChanger").value;
+        if (course === "") {
+            return;
+        }
+    
+        window.location.href = "?course=" + course;
     }
-
-    window.location.href = "?course=" + course;
 }
 
 function handleButtonClick() {

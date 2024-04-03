@@ -51,18 +51,26 @@ if (! empty($_POST["email"])) {
     }
 
 ?>
-    <h1>NB! Dette er en STUB som bare viser mailen som "skal" bli sendt til brukeren. Dette er fordi vi ikke tar oss tid til å implementere en mailserver.</h1>
-    <h3>E-post sendt til <?php echo $email; ?></h3>
-    <div style="border: 1px solid black">
-        <p>Venligst klikk på følgende link for å resette ditt passord.</p>
-        <br>
-        <p><a <?php echo 'href="./reset_password.php?key='.$key.'&email='.$email.'&action=reset"'; ?> target="_blank">Klikk for å resette passord</a></p>
-        <br>
-        <p>Husk å kopiere hele lenken til nettleseren din. Linken vil utløpe etter 1 dag av sikkerhetsmessig grunner.</p>
-        <p>Hvis du ikke ba om denne e-posten med glemt passord, ingen handling er nødvendig, vil ikke passordet ditt tilbakestilles. Det kan imidlertid være lurt å logge på kontoen din og endre sikkerhetspassordet slik noen kanskje har gjettet det.</p>
-        <br>
-        <p>Fra, Datasikkerhet Projekt Gruppe 3</p>
-    </div>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Glemt Passord?</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>NB! Dette er en STUB som bare viser mailen som "skal" bli sendt til brukeren. Dette er fordi vi ikke tar oss tid til å implementere en mailserver.</h1>
+        <h3>E-post sendt til <?php echo $email; ?></h3>
+        <div class="emailbox">
+            <p>Venligst klikk på følgende link for å resette ditt passord.</p>
+            <br>
+            <p><a <?php echo 'href="./reset_password.php?key='.$key.'&email='.$email.'&action=reset"'; ?> target="_blank">Klikk for å resette passord</a></p>
+            <br>
+            <p>Husk å kopiere hele lenken til nettleseren din. Linken vil utløpe etter 1 dag av sikkerhetsmessig grunner.</p>
+            <p>Hvis du ikke ba om denne e-posten med glemt passord, ingen handling er nødvendig, vil ikke passordet ditt tilbakestilles. Det kan imidlertid være lurt å logge på kontoen din og endre sikkerhetspassordet slik noen kanskje har gjettet det.</p>
+            <br>
+            <p>Fra, Datasikkerhet Projekt Gruppe 3</p>
+        </div>
+    </body>
 <?php
 }
 ?>

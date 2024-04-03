@@ -6,20 +6,8 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-<title>Glemt Passord?</title>
-<style>
-    .custom_form {
-        display: inline-block;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%,-50%);
-    }
-
-    .error_msg {
-        color: red;
-    }
-</style>
+    <title>Glemt Passord?</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
