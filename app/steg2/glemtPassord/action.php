@@ -51,6 +51,7 @@ if (! empty($_POST["email"])) {
     }
 
 ?>
+    <h1>NB! Dette er en STUB som bare viser mailen som "skal" bli sendt til brukeren. Dette er fordi vi ikke tar oss tid til å implementere en mailserver.</h1>
     <h3>E-post sendt til <?php echo $email; ?></h3>
     <div style="border: 1px solid black">
         <p>Venligst klikk på følgende link for å resette ditt passord.</p>
