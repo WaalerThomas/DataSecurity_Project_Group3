@@ -3,6 +3,8 @@
 *.log
 tmp/
 
-app/inc/config.php
+app/inc/*
+!app/inc/config.php.example
+!app/inc/bootstrap.php
 *_password.txt
 app/steg1/uploads/*.*
