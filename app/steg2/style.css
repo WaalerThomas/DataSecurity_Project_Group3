@@ -1,0 +1,160 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+.header {
+    overflow: hidden;
+    background-color: #333;
+}
+
+.header a {
+    float: right;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.header a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.header span {
+    color: white;
+    display: block;
+    float: left;
+    text-align: center;
+    padding: 14px 16px;
+}
+
+.column {
+    float: left;
+    padding: 10px;
+}
+.column.side {
+    width: 25%;
+}
+.column.middle {
+    width: 75%;
+}
+.column.full {
+    width: 100%;
+}
+
+.row::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.emneinput {
+    position: absolute;
+    top: 80%;
+}
+
+#commentsection{
+    border: 1px solid black;
+    width: 70%;
+}
+.commentsection{
+    border: 1px solid black;
+    width: 70%;
+}
+
+.user-comment{
+    font-weight: bold; 
+    color: grey;
+    margin-left: 1rem;
+    border-bottom: 1px solid black;
+    width: 100px;
+}
+
+.report-button {
+    margin-left: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 1rem;
+}
+
+.user-answer{
+    font-weight: bold; 
+    color: black;
+    margin-left: 2.5rem;
+    border-bottom: 1px solid black;
+    width: 100px;
+}
+
+.comment{
+    margin-left: 1rem;
+    margin-top: 0;
+}
+
+#new-comment {
+    flex: 1;
+}
+
+#send-comment{
+    margin-top: .5rem;
+}
+
+.answer{
+    margin-left: 2.5rem;
+}
+
+.emneinfo{
+    display: flex;
+    gap: 1rem;
+}
+
+.info{
+    display: flex;
+    gap: 10px;
+}
+
+.teachername{
+    font-size: 15px;
+    padding-top: .5rem;
+    margin: 0;
+}
+
+.error_msg {
+    color: red;
+}
+.info_msg {
+    color: #7a7a7a;
+}
+.status_msg {
+    color: #218c00;
+}
+
+.answer-textbox {
+    margin-top: 4px;
+    margin-left: 1rem; /* Adjust the margin as needed */
+    padding: 6px;
+    width: 70%;
+}
+
+.answer-button {
+    margin-top: 4px;
+    margin-left: 1rem; /* Adjust the margin as needed */
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.comment-top{
+    display: flex;
+    align-items: center;
+}
+
+.lecturer-answer {
+    background: darkseagreen;
+}

@@ -40,173 +40,10 @@ if (isset($_GET['hash'])) {
 <!DOCTYPE html>
 <html>
 <head>
-<title>Main page</title>
+    <title>Main page</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<style>
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        margin: 0;
-    }
-
-    .header {
-        overflow: hidden;
-        background-color: #333;
-    }
-
-    .header a {
-        float: right;
-        display: block;
-        color: #f2f2f2;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-    }
-
-    .header a:hover {
-        background-color: #ddd;
-        color: black;
-    }
-
-    .header span {
-        color: white;
-        display: block;
-        float: left;
-        text-align: center;
-        padding: 14px 16px;
-    }
-
-    .column {
-        float: left;
-        padding: 10px;
-    }
-    .column.side {
-        width: 25%;
-    }
-    .column.middle {
-        width: 75%;
-    }
-    .column.full {
-        width: 100%;
-    }
-
-    .row::after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-
-    .emneinput {
-        position: absolute;
-        top: 80%;
-    }
-
-    #commentsection{
-        border: 1px solid black;
-        width: 70%;
-    }
-    .commentsection{
-        border: 1px solid black;
-        width: 70%;
-    }
-
-    .username-comment{
-        font-weight: bold; 
-        color: grey;
-        margin-left: 1rem;
-        border-bottom: 1px solid black;
-        width: 100px;
-    }
-
-    .report-button {
-        margin-left: 1rem;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        height: 1rem;
-    }
-
-    .username-answer{
-        font-weight: bold; 
-        color: black;
-        margin-left: 2.5rem;
-        border-bottom: 1px solid black;
-        width: 100px;
-    }
-
-    .comment{
-        margin-left: 1rem;
-        margin-top: 0;
-    }
-
-    #new-comment {
-        flex: 1;
-    }
-
-    #send-comment{
-        margin-top: .5rem;
-    }
-
-    .answer{
-        margin-left: 2.5rem;
-    }
-
-    .emneinfo{
-        display: flex;
-        gap: 1rem;
-    }
-
-    .info{
-        display: flex;
-        gap: 10px;
-    }
-
-    .teachername{
-        font-size: 15px;
-        padding-top: .5rem;
-        margin: 0;
-    }
-
-    .error_msg {
-        color: red;
-    }
-    .info_msg {
-        color: #7a7a7a;
-    }
-    .status_msg {
-        color: #218c00;
-    }
-
-    .answer-textbox {
-        margin-top: 4px;
-        margin-left: 1rem; /* Adjust the margin as needed */
-        padding: 6px;
-        width: 70%;
-    }
-
-    .answer-button {
-        margin-top: 4px;
-        margin-left: 1rem; /* Adjust the margin as needed */
-        padding: 6px 12px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .comment-top{
-        display: flex;
-        align-items: center;
-    }
-
-    .lecturer-answer {
-        background: darkseagreen;
-    }
-
-</style>
 
 <div class="header">
     <?php
@@ -329,7 +166,7 @@ if (isset($_GET['hash'])) {
                 <div>
                     <div class="comment-info">
                         <div class="comment-top">
-                            <p class="username-comment">Spørsmål</p>
+                            <p class="user-comment">Spørsmål</p>
                             <form action="report-action.php" method="post">
                                 <input type="hidden" id="course_name" name="course_name" value<?php echo '="'.$courseData[0]['name'].'"' ?>></input>
                                 <input type="hidden" id="msg_index" name="msg_index" value<?php echo '="'.$msg_index.'"' ?>></input>
@@ -342,7 +179,7 @@ if (isset($_GET['hash'])) {
                     if ($msg['answer']) {
                         ?>
                         <div class="lecturer-answer">
-                            <p class="username-answer">Foreleser</p>
+                            <p class="user-answer">Foreleser</p>
                             <p class="answer"><?php echo $msg['answer']; ?></p>
                         </div>
                         <?php
@@ -356,7 +193,7 @@ if (isset($_GET['hash'])) {
                     foreach ($commentResult as $com) {
                         ?>
                         <div class="comment-info">
-                            <p class="username-answer">Svar</p>
+                            <p class="user-answer">Svar</p>
                             <p class="answer"><?php echo $com['comment']; ?></p>
                         </div>
                         <?php
@@ -440,96 +277,7 @@ if (isset($_GET['hash'])) {
     </div>
 </div>
 
-<script>
-    var id = 0;
-
-    function changeCourse() {
-        var course = document.getElementById("courseChanger").value;
-        if (course === "") {
-            return;
-        }
-
-        window.location.href = "?course=" + course;
-    }
-
-    function handleButtonClick() {
-        id++;
-        var newComment = document.getElementById("new-comment").value;
-
-        var newCommentDiv = document.createElement("div");
-        newCommentDiv.classList.add(`comment-${id}`);
-
-        var newCommentInfoDiv = document.createElement("div");
-        newCommentInfoDiv.classList.add("comment-info");
-
-        var newCommentTopDiv = document.createElement("div");
-        newCommentTopDiv.classList.add("comment-top");
-
-        var newUsernameParagraph = document.createElement("p");
-        newUsernameParagraph.classList.add("username-comment");
-        newUsernameParagraph.textContent = "Spørsmål";
-
-        var reportButton = document.createElement("button");
-        reportButton.classList.add("report-button");
-        reportButton.textContent = "Rapporter";
-        reportButton.onclick = function () {
-            alert("Kommentar rapportert!");
-        };
-
-        var newCommentParagraph = document.createElement("p");
-        newCommentParagraph.classList.add("comment");
-        newCommentParagraph.textContent = newComment;
-
-        var answerTextbox = document.createElement("input");
-        answerTextbox.setAttribute("type", "text");
-        answerTextbox.setAttribute("placeholder", "Skriv et svar...");
-        answerTextbox.classList.add("answer-textbox");
-
-        var answerButton = document.createElement("button");
-        answerButton.classList.add("answer-button");
-        answerButton.textContent = "Send svar";
-        answerButton.onclick = function () {
-            handleAnswerButtonClick(newCommentDiv);
-        };
-
-        newCommentInfoDiv.appendChild(newCommentTopDiv);
-        newCommentTopDiv.appendChild(newUsernameParagraph);
-        newCommentTopDiv.appendChild(reportButton);
-        
-
-        newCommentDiv.appendChild(newCommentInfoDiv);
-        newCommentDiv.appendChild(newCommentParagraph);
-        newCommentDiv.appendChild(answerTextbox);
-        newCommentDiv.appendChild(answerButton);
-        
-        document.getElementById("commentsection").appendChild(newCommentDiv);
-    }
-
-function handleAnswerButtonClick(commentDiv) {
-    var newAnswer = commentDiv.querySelector(".answer-textbox").value;
-
-    var newAnswerDiv = document.createElement("div");
-    newAnswerDiv.classList.add("answer-1");
-
-    var newCommentInfoDiv = document.createElement("div");
-    newCommentInfoDiv.classList.add("comment-info");
-
-    var newUsernameParagraph = document.createElement("p");
-    newUsernameParagraph.classList.add("username-answer");
-    newUsernameParagraph.textContent = "Svar";
-
-    var newAnswerParagraph = document.createElement("p");
-    newAnswerParagraph.classList.add("answer");
-    newAnswerParagraph.textContent = newAnswer;
-
-    newCommentInfoDiv.appendChild(newUsernameParagraph);
-    newCommentInfoDiv.appendChild(newAnswerParagraph);
-
-    newAnswerDiv.appendChild(newCommentInfoDiv);
-
-    commentDiv.insertBefore(newAnswerDiv, commentDiv.querySelector(".answer-textbox"));
-}
-</script>
+<script src="index_script.js"></script>
 
 </body>
 </html>

@@ -8,7 +8,8 @@ services:
     volumes:
       - ./app:/var/www/html
       - ./build/php/datasec.conf:/etc/apache2/sites-available/datasec.conf
-      
+      - ./build/php/php.ini:/usr/local/etc/php/php.ini
+
   mysql:
     secrets:
       - db_root_password
