@@ -1,12 +1,17 @@
 <?php
 require_once __DIR__ . "/../dbClasses/PasswordToken.php";
 
+session_start();
+
 /**
  * Isset email key validate
  */
 if (isset($_GET["key"]) && isset($_GET["email"]) && isset($_GET["action"])
 && ($_GET["action"] == "reset") && !isset($_POST["action"]))
 {
+    // Generate CSRF token
+    $_SESSION['CSRF_token'] = bin2hex(random_bytes(35));
+
     $error = "";
     $curDate = date("Y-m-d H:i:s");
     $passToken = new PasswordToken();
@@ -24,6 +29,7 @@ if (isset($_GET["key"]) && isset($_GET["email"]) && isset($_GET["action"])
         ?>
             <br />
             <form method="post" action="" name="update">
+                <input type="hidden" name="authenticity_token" value="<?php echo $_SESSION['CSRF_token'] ?? '' ?>">
                 <input type="hidden" name="action" value="update" />
                 <br /><br />
                 <label><strong>Enter New Password:</strong></label><br />
@@ -53,6 +59,13 @@ if (isset($_POST["email"]) && isset($_POST["action"]) && ($_POST["action"] == "u
     require_once __DIR__ . "/../dbClasses/User.php";
 
     $error = "";
+
+    // Check the CSRF token
+    $token = filter_input(INPUT_POST, 'authenticity_token', FILTER_SANITIZE_STRING);
+    if (! $token || $token !== $_SESSION['CSRF_token']) {
+        header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+        exit;
+    }
 
     if ($_POST["pass1"] != $_POST["pass2"]) {
         $error .= "<p>Passordene er ikke like.<br><br></p>";

@@ -6,6 +6,13 @@ require_once __DIR__ . "/dbClasses/Message.php";
 $message = new Message();
 $_SESSION["errorMessage"] = "";
 
+// Check the CSRF token
+$token = filter_input(INPUT_POST, 'authenticity_token', FILTER_SANITIZE_STRING);
+if (! $token || $token !== $_SESSION['CSRF_token']) {
+    header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+    exit;
+}
+
 // Check for new question/message
 if (isset($_POST['new-comment']) && isset($_POST['send_message']) && isset($_POST['course_name'])
 && !empty($_POST['new-comment']) && !empty($_POST['course_name'])) {    

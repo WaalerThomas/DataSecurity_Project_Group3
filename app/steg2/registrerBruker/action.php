@@ -2,6 +2,8 @@
 // TODO: Check that the "logic" works XD
 // For fixing my permission denied problem when saving pictures: https://stackoverflow.com/questions/8103860/move-uploaded-file-gives-failed-to-open-stream-permission-denied-error
 
+session_start();
+
 function checkProfilePictures() {
     $target_dir = "../uploads/";
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
@@ -37,9 +39,14 @@ function checkProfilePictures() {
     return array($uploadOk, $target_file);
 }
 
-if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"])) {
-    session_start();
+// Check the CSRF token
+$token = filter_input(INPUT_POST, 'authenticity_token', FILTER_SANITIZE_STRING);
+if (! $token || $token !== $_SESSION['CSRF_token']) {
+    header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+    exit;
+}
 
+if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"])) {
     $_SESSION["errorMessage"] = "";
     $userType = "0";
 

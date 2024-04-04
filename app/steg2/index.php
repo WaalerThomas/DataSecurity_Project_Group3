@@ -5,6 +5,9 @@ session_start();
 $displayName = "";
 $userType = "";
 
+// Generate CSRF token
+$_SESSION['CSRF_token'] = bin2hex(random_bytes(35));
+
 // Populate "global" variables if someone is logged in
 if (! empty($_SESSION["userId"])) {
     require_once __DIR__ . "/dbClasses/User.php";
@@ -168,6 +171,7 @@ if (isset($_GET['hash'])) {
                         <div class="comment-top">
                             <p class="user-comment">Spørsmål</p>
                             <form action="report-action.php" method="post">
+                                <input type="hidden" name="authenticity_token" value="<?php echo $_SESSION['CSRF_token'] ?? '' ?>">
                                 <input type="hidden" id="course_name" name="course_name" value<?php echo '="'.$courseData[0]['name'].'"' ?>></input>
                                 <input type="hidden" id="msg_index" name="msg_index" value<?php echo '="'.$msg_index.'"' ?>></input>
                                 <input type="submit" class="report-button" value="Rapporter" name="report_message">
@@ -202,6 +206,7 @@ if (isset($_GET['hash'])) {
                     if ( ($userType == "Foreleser" && empty($msg['answer'])) || $userType != "Foreleser") {
                         ?>
                         <form action="message-action.php" method="post">
+                            <input type="hidden" name="authenticity_token" value="<?php echo $_SESSION['CSRF_token'] ?? '' ?>">
                             <input type="hidden" id="course_name" name="course_name" value<?php echo '="'.$courseData[0]['name'].'"' ?>></input>
                             <input type="hidden" id="msg_index" name="msg_index" value<?php echo '="'.$msg_index.'"' ?>></input>
                             <input class="answer-textbox" type="text" name="answer-textbox" id="answer-textbox" placeholder="Skriv et svar...">
@@ -227,6 +232,7 @@ if (isset($_GET['hash'])) {
                 ?>
                 <div id="send-comment">
                     <form action="message-action.php" method="post">
+                        <input type="hidden" name="authenticity_token" value="<?php echo $_SESSION['CSRF_token'] ?? '' ?>">
                         <input type="hidden" id="course_name" name="course_name" value<?php echo '="'.$courseData[0]['name'].'"' ?>></input>
                         <input type="text" id="new-comment" name="new-comment" placeholder="Skriv en kommentar...">
                         <input type="submit" value="Send" name="send_message">
@@ -265,6 +271,7 @@ if (isset($_GET['hash'])) {
             ?>
             <h2>Emnesøk</h2>
             <form action="subject-action.php" method="post">
+                <input type="hidden" name="authenticity_token" value="<?php echo $_SESSION['CSRF_token'] ?? '' ?>">
                 <label>Emnekode:</label>
                 <input type="text" id="emnekode" name="emnekode" required><br><br>
                 <label>PIN-kode:</label>

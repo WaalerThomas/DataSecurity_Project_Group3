@@ -2,6 +2,9 @@
 // Start the session to be able to access $_SESSION.
 session_start();
 
+// Generate CSRF token
+$_SESSION['CSRF_token'] = bin2hex(random_bytes(35));
+
 // Check if they are logged in or not
 if (empty($_SESSION["userId"])) {
     header("Location: ../");
@@ -26,6 +29,7 @@ if (isset($_SESSION["errorMessage"])) {
 }
 ?>
 <form action="action.php" method="post">
+    <input type="hidden" name="authenticity_token" value="<?php echo $_SESSION['CSRF_token'] ?? '' ?>">
     <label>Gammelt Passord:</label>
     <input type="password" id="passord_old" name="passord_old" required><br><br>
     <label>Nytt Passord:</label>

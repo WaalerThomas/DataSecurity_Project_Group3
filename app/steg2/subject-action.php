@@ -5,6 +5,13 @@
 session_start();
 require_once __DIR__ . "/dbClasses/Course.php";
 
+// Check the CSRF token
+$token = filter_input(INPUT_POST, 'authenticity_token', FILTER_SANITIZE_STRING);
+if (! $token || $token !== $_SESSION['CSRF_token']) {
+    header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+    exit;
+}
+
 if (! empty($_POST["emnekode"]) && ! empty($_POST["pin"])) {
     # Check if the pin matches the course
     $course = new Course();

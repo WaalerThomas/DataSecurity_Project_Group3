@@ -9,6 +9,9 @@ if (! isset($_GET["type"])) {
     header("Location: ./?type=0");
     exit;
 }
+
+// Generate CSRF token
+$_SESSION['CSRF_token'] = bin2hex(random_bytes(35));
 ?>
 
 <!DOCTYPE html>
@@ -41,6 +44,7 @@ if (! isset($_GET["type"])) {
     ?>
         <div id="student" class="tabcontent">
             <form action="action.php" method="post" class="customForm">
+                <input type="hidden" name="authenticity_token" value="<?php echo $_SESSION['CSRF_token'] ?? '' ?>">
                 <label>Fornavn:</label>
                 <input type="text" id="first_name" name="first_name" required><br><br>
                 <label>Etternavn:</label>
@@ -59,6 +63,7 @@ if (! isset($_GET["type"])) {
     ?>
         <div id="foreleser" class="tabcontent">
             <form action="action.php" method="post" class="customForm" enctype="multipart/form-data">
+                <input type="hidden" name="authenticity_token" value="<?php echo $_SESSION['CSRF_token'] ?? '' ?>">
                 <label>Fornavn:</label>
                 <input type="text" id="first_name" name="first_name" required><br><br>
                 <label>Etternavn:</label>

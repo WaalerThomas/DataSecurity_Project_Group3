@@ -7,6 +7,13 @@ if (isset($_POST['report_message']) && isset($_POST['course_name']) && isset($_P
 && !empty($_POST['course_name'])) {
     require_once __DIR__ . "/dbClasses/Message.php";
 
+    // Check the CSRF token
+    $token = filter_input(INPUT_POST, 'authenticity_token', FILTER_SANITIZE_STRING);
+    if (! $token || $token !== $_SESSION['CSRF_token']) {
+        header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+        exit;
+    }
+
     $message = new Message();
     $messageResult = $message->getAllCourseMessages($_POST['course_name']);
     if (! $messageResult) {
