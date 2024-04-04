@@ -31,7 +31,7 @@ session_start();
 
     <br>
 
-    <a href="../glemtPassord/">Glemt passord?</a>
+    <a href="../glemtPassord/" target="_top">Glemt passord?</a>
 </div>
 
 </body>

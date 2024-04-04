@@ -50,13 +50,13 @@ if (isset($_GET['hash'])) {
     if (! empty($displayName) && !empty($userType)) {
     ?>
         <span><?php echo $displayName . " - " . $userType; ?></span>
-        <a href="logout.php">Logg ut</a>
-        <a href="byttePassord/">Bytte passord</a>
+        <a href="logout.php" target="_top">Logg ut</a>
+        <a href="byttePassord/" target="_top">Bytte passord</a>
     <?php
     } else {
     ?>
-        <a href="registrerBruker/" >Registrer</a>
-        <a href="login/">Logg inn</a>
+        <a href="registrerBruker/" target="_top">Registrer</a>
+        <a href="login/" target="_top">Logg inn</a>
     <?php
     }
     ?>

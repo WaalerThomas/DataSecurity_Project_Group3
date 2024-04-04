@@ -32,8 +32,8 @@ if (! isset($_GET["type"])) {
     ?>
 
     <div class="tab">
-        <a <?php if ($_GET["type"] == "0") { echo 'class="active"'; } ?> href="?type=0">Student</a>
-        <a <?php if ($_GET["type"] == "1") { echo 'class="active"'; } ?> href="?type=1">Foreleser</a>
+        <a <?php if ($_GET["type"] == "0") { echo 'class="active"'; } ?> target="_top" href="?type=0">Student</a>
+        <a <?php if ($_GET["type"] == "1") { echo 'class="active"'; } ?> target="_top" href="?type=1">Foreleser</a>
     </div>
 
     <?php

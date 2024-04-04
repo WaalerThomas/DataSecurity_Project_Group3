@@ -24,5 +24,5 @@ if (! empty($_POST["change_pass"])) {
     $user->updateUserPassword($findEmail[0]['email'], $_POST["passord_new"]);
 }
 
-echo '<div class="error"><p>Gratulerer! Passordet ditt har blitt oppdatert.</p><p><a href="../">Klikk her</a> for å gå tilbake til hovedsiden.</p></div><br />';
+echo '<div class="error"><p>Gratulerer! Passordet ditt har blitt oppdatert.</p><p><a href="../" target="_top">Klikk her</a> for å gå tilbake til hovedsiden.</p></div><br />';
 ?>
