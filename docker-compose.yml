@@ -10,20 +10,32 @@ services:
       - ./build/php/datasec.conf:/etc/apache2/sites-available/datasec.conf
       - ./build/php/php.ini:/usr/local/etc/php/php.ini
 
+  #mysql:
+  #  secrets:
+  #    - db_root_password
+  #    - db_someuser_password
+  #  ports:
+  #    - "3306:3306"
+  #  build: './build/mysql'
+  #  environment:
+  #    MYSQL_USER: someuser
+  #    MYSQL_DATABASE: "datasec_db"
+  #    MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+  #    MYSQL_PASSWORD_FILE: /run/secrets/db_someuser_password
+  #  volumes:
+  #    - dbData:/var/lib/mysql
   mysql:
     secrets:
       - db_root_password
-      - db_someuser_password
+    build: './build/mysql'
     ports:
       - "3306:3306"
-    build: './build/mysql'
     environment:
-      MYSQL_USER: someuser
-      MYSQL_DATABASE: "datasec_db"
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MYSQL_PASSWORD_FILE: /run/secrets/db_someuser_password
     volumes:
       - dbData:/var/lib/mysql
+      - ./build/mysql/init:/docker-entrypoint-initdb.d
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
 volumes:
   app:
