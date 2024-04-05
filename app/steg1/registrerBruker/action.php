@@ -1,5 +1,4 @@
 <?php
-// TODO: Check that the "logic" works XD
 // For fixing my permission denied problem when saving pictures: https://stackoverflow.com/questions/8103860/move-uploaded-file-gives-failed-to-open-stream-permission-denied-error
 
 function checkProfilePictures() {
@@ -13,24 +12,24 @@ function checkProfilePictures() {
     // Check if image file is an actual image or fake image
     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
     if ($check == false) {
-        $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "File is not an image.";
+        $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Filen er ikke et bilde.";
         $uploadOk = 0;
     }
 
     if (file_exists($target_file)) {
-        $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Sorry, file already exists.";
+        $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Beklager, filen eksisterer allerede.";
         $uploadOk = 0;
     }
     
     // Check file size
     if ($_FILES["fileToUpload"]["size"] > 500000) {
-        $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Sorry, your file is too large.";
+        $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Beklager, filen din er for stor.";
         $uploadOk = 0;
     }
 
     // Allow certain file formats
     if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
-        $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Sorry, only JPG, JPEG, & PNG files are allowed.";
+        $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Beklager, bare JPG, JPEG, & PNG filer er lovlig.";
         $uploadOk = 0;
     }
 
@@ -68,7 +67,7 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
 
         $profResult = checkProfilePictures();
         if ($profResult[0] == 0) {
-            $_SESSION["errorMessage"] .= "Sorry, your file was not uploaded. ";
+            $_SESSION["errorMessage"] .= "Beklager, feilet under opplasting av filen. ";
         } else {
             // Removes the first dots in the filepath
             $_POST["profile_path"] = ltrim($profResult[1], '.');
@@ -81,7 +80,6 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
         exit;
     }
 
-    // TODO: Start transaction
     require_once __DIR__ . "/../dbClasses/DataSource.php";
     $ds = new DataSource();
     $ds->startTransaction();
@@ -114,14 +112,13 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
     if (! empty($profResult) && $profResult[0] == 1) {
         $target_file = $profResult[1];
         if (! move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            $_SESSION["errorMessage"] .= "Sorry, there was an error uploading your file.";
+            $_SESSION["errorMessage"] .= "Beklager, feilet under opplasting av filen.";
             $ds->rollbackTransaction();
             header("Location: ./?type=" . $userType);
             exit;
         }
     }
 
-    // TODO: Commit transaction
     $ds->commitTransaction();
     
     header("Location: ../");
