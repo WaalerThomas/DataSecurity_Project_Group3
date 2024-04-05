@@ -5,6 +5,12 @@
 session_start();
 
 function checkProfilePictures() {
+
+    // Check if file was uploaded
+    if ($_FILES['fileToUpload']['error'] == UPLOAD_ERR_NO_FILE) {
+        return array(0, null); // No file uploaded
+    }
+    
     $target_dir = "../uploads/";
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $uploadOk = 1;
@@ -69,13 +75,13 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
     }
 
     # Do check for only the lecturer
-    $profResult = array();
-    if (! empty($_POST["registrer_foreleser"])) {
-        $userType = "1";
-
+    if (!empty($_POST["registrer_foreleser"])) {
         $profResult = checkProfilePictures();
+        $userType = "1";
         if ($profResult[0] == 0) {
-            $_SESSION["errorMessage"] .= "Sorry, your file was not uploaded. ";
+            $_SESSION["errorMessage"] .= "Du må legge til ett bilde for å registrere deg. ";
+            header("Location: ./?type=" . $userType);
+            exit;
         } else {
             // Removes the first dots in the filepath
             $_POST["profile_path"] = ltrim($profResult[1], '.');
