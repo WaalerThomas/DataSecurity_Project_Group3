@@ -138,7 +138,9 @@ WITH GRANT OPTION;
 GRANT INSERT ON `datasec_db_2`.`reports`
 TO 'datasec_db_2_guest'@'localhost';
 
-GRANT SELECT ON `datasec_db_2`.`messages`
+-- Hide which user has written the comment
+GRANT SELECT(`idmessages`,`question`, `answer`, `courses_idcourses`)
+ON `datasec_db_2`.`messages`
 TO 'datasec_db_2_guest'@'localhost';
 
 GRANT SELECT, INSERT ON `datasec_db_2`.`comments`
