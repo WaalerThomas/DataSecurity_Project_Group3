@@ -129,14 +129,43 @@ CREATE USER 'datasec_db_2_guest'@'localhost' IDENTIFIED BY 'guest';
 CREATE USER 'datasec_db_2_student'@'localhost' IDENTIFIED BY 'student';
 CREATE USER 'datasec_db_2_lecturer'@'localhost' IDENTIFIED BY 'lecturer';
 
--- Do permissions for master
+-- ===== Do permissions for master
 GRANT ALL ON `datasec_db_2`.*
 TO 'datasec_db_2_master'@'localhost'
 WITH GRANT OPTION;
 
--- Do permissions for guest
+-- ===== Do permissions for guest
+GRANT INSERT ON `datasec_db_2`.`reports`
+TO 'datasec_db_2_guest'@'localhost';
 
--- Lock down the root user
+GRANT SELECT ON `datasec_db_2`.`messages`
+TO 'datasec_db_2_guest'@'localhost';
+
+GRANT SELECT, INSERT ON `datasec_db_2`.`comments`
+TO 'datasec_db_2_guest'@'localhost';
+
+GRANT SELECT ON `datasec_db_2`.`courses`
+TO 'datasec_db_2_guest'@'localhost';
+
+GRANT SELECT ON `datasec_db_2`.`users`
+TO 'datasec_db_2_guest'@'localhost';
+
+GRANT SELECT ON `datasec_db_2`.`user_type`
+TO 'datasec_db_2_guest'@'localhost';
+
+-- NOTE: Granting these could open up for steeling session tokens
+--GRANT SELECT, INSERT ON `datasec_db_2`.`api_sessions`
+--TO 'datasec_db_2_guest'@'localhost';
+--GRANT SELECT, INSERT ON `datasec_db_2`.`api_keys`
+--TO 'datasec_db_2_guest'@'localhost';
+
+-- ===== Do permissions for student
+
+
+-- ===== Do permissions for lecturer
+
+
+-- ===== Lock down the root user
 DROP USER 'root'@'%';
 
 REVOKE ALL ON *.* FROM 'root'@'localhost';
