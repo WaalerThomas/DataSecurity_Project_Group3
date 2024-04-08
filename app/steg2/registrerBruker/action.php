@@ -5,7 +5,6 @@
 session_start();
 
 function checkProfilePictures() {
-
     // Check if file was uploaded
     if ($_FILES['fileToUpload']['error'] == UPLOAD_ERR_NO_FILE) {
         return array(0, null); // No file uploaded
@@ -94,7 +93,6 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
         exit;
     }
 
-    // TODO: Start transaction
     require_once __DIR__ . "/../dbClasses/DataSource.php";
     $ds = new DataSource();
     $ds->startTransaction();
@@ -134,7 +132,6 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
         }
     }
 
-    // TODO: Commit transaction
     $ds->commitTransaction();
     
     header("Location: ../");

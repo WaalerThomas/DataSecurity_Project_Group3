@@ -16,7 +16,9 @@ if (! $token || $token !== $_SESSION['CSRF_token']) {
 // Check for new question/message
 if (isset($_POST['new-comment']) && isset($_POST['send_message']) && isset($_POST['course_name'])
 && !empty($_POST['new-comment']) && !empty($_POST['course_name'])) {    
-    $messageResult = $message->createMessage($_POST['new-comment'], $_POST['course_name'], $_SESSION['userId']);
+    $comment = htmlspecialchars($_POST["new-comment"], ENT_QUOTES);
+    
+    $messageResult = $message->createMessage($comment, $_POST['course_name'], $_SESSION['userId']);
     if (! $messageResult) {
         $_SESSION["errorMessage"] .= "Feilet under oppretting av melding. ";
     }
@@ -38,14 +40,17 @@ if (isset($_POST['send_comment']) && isset($_POST['course_name']) && isset($_POS
     require_once __DIR__ . "/dbClasses/Course.php";
     $course = new Course();
 
+    // Sanitize user input
+    $answer = htmlspecialchars($_POST["answer-textbox"], ENT_QUOTES);
+    $msg_index = (int)filter_var($_POST["msg_index"], FILTER_SANITIZE_NUMBER_INT);
+
     if (isset($_SESSION['userId'])) {
         $courseResult = $course->getCourseByName($_POST['course_name']);
 
         // Check if it is the lecturer that is answering
         if ($messageResult[0]['courses_idcourses'] == $courseResult[0]['idcourses'] && $courseResult[0]['users_iduser'] == $_SESSION['userId']) {
-            $msg_index = (int)$_POST['msg_index'];
             $msgId = $messageResult[$msg_index]['idmessages'];
-            $msgResult = $message->addAnswer($msgId, $_POST['answer-textbox']);
+            $msgResult = $message->addAnswer($msgId, $answer);
             
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit;
@@ -73,8 +78,7 @@ if (isset($_POST['send_comment']) && isset($_POST['course_name']) && isset($_POS
         // Hash is valid if it gets here
         
         // It is a student or a guest user that is commenting
-        $msg_index = (int)$_POST['msg_index'];
-        $commentResult = $message->createComment($_POST['answer-textbox'], $messageResult[$msg_index]['idmessages']);
+        $commentResult = $message->createComment($answer, $messageResult[$msg_index]['idmessages']);
         if (! $commentResult) {
             $_SESSION["errorMessage"] .= "Feilet under oppretting av melding. ";
         }

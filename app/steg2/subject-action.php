@@ -13,13 +13,22 @@ if (! $token || $token !== $_SESSION['CSRF_token']) {
 }
 
 if (! empty($_POST["emnekode"]) && ! empty($_POST["pin"])) {
+    // Sanitize user input
+    $subjectCode = filter_var($_POST["emnekode"], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+    $pinCode = filter_var($_POST["pin"], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+    if (! filter_var($pinCode, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE)) {
+        $_SESSION["errorMessage"] = "PIN er ikke et nummer";
+        header("Location: ./");
+        exit;
+    }
+    
     # Check if the pin matches the course
     $course = new Course();
-    $courseResult = $course->isPinValid($_POST["emnekode"], $_POST["pin"]);
+    $courseResult = $course->isPinValid($subjectCode, $pinCode);
     
     if ($courseResult == 1) {
-        $hash = md5($_POST['pin'] . "emneCourseSaltyBabeThingy" . $_POST['emnekode']);
-        header("Location: ./?course=".$_POST['emnekode']."&hash=".$hash);
+        $hash = md5($pinCode . "emneCourseSaltyBabeThingy" . $subjectCode);
+        header("Location: ./?course=".$subjectCode."&hash=".$hash);
         /*Need to add OPEN COURSE */
         exit;
     }

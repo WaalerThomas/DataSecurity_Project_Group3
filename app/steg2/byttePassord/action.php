@@ -19,8 +19,12 @@ if (! empty($_POST["change_pass"])) {
         exit;
     }
 
+    # Sanitize password
+    $passNew = filter_var($_POST['passord_new'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+    $passOld = filter_var($_POST['passord_old'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+
     $user = new User();
-    $passCheck = $user->passCheck($_SESSION['userId'], $_POST['passord_old']);
+    $passCheck = $user->passCheck($_SESSION['userId'], $passOld);
     if($passCheck == FALSE) {
         $_SESSION["errorMessage"] = "Gammelt passord matcher ikke";
         header("Location: ./");
@@ -28,7 +32,7 @@ if (! empty($_POST["change_pass"])) {
     }
     
     $findEmail = $user->getEmailById($_SESSION['userId']);
-    $user->updateUserPassword($findEmail[0]['email'], $_POST["passord_new"]);
+    $user->updateUserPassword($findEmail[0]['email'], $passNew);
 }
 
 echo '<div class="error"><p>Gratulerer! Passordet ditt har blitt oppdatert.</p><p><a href="../" target="_top">Klikk her</a> for å gå tilbake til hovedsiden.</p></div><br />';

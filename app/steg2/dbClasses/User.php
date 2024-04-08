@@ -54,11 +54,10 @@ class User
         return $userResult;
     }
     
-    function loginUser() {
-        $userResult = $this->getUserByEmail($_POST["email"]);
+    function loginUser($email, $password) {
+        $userResult = $this->getUserByEmail($email);
         $isLoginPassword = 0;
         if (! empty($userResult)) {
-            $password = $_POST["password"];
             $hashedPassword = $userResult[0]["password"];
             if (password_verify($password, $hashedPassword)) {
                 $isLoginPassword = 1;
