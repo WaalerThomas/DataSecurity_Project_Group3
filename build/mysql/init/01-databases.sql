@@ -124,42 +124,45 @@ COMMIT;
 
 -- Create Users and such
 -- TODO: Make better passwords for the users
-CREATE USER 'datasec_db_2_master'@'localhost' IDENTIFIED BY 'master';
-CREATE USER 'datasec_db_2_guest'@'localhost' IDENTIFIED BY 'guest';
-CREATE USER 'datasec_db_2_student'@'localhost' IDENTIFIED BY 'student';
-CREATE USER 'datasec_db_2_lecturer'@'localhost' IDENTIFIED BY 'lecturer';
+-- CREATE USER 'datasec_db_2_master'@'localhost' IDENTIFIED BY 'master';
+CREATE USER 'datasec_db_2_guest'@'%' IDENTIFIED BY 'guestpassword';
+-- CREATE USER 'datasec_db_2_student'@'localhost' IDENTIFIED BY 'student';
+-- CREATE USER 'datasec_db_2_lecturer'@'localhost' IDENTIFIED BY 'lecturer';
 
 -- ===== Do permissions for master
-GRANT ALL ON `datasec_db_2`.*
-TO 'datasec_db_2_master'@'localhost'
-WITH GRANT OPTION;
+-- GRANT ALL ON `datasec_db_2`.*
+-- TO 'datasec_db_2_master'@'localhost'
+-- WITH GRANT OPTION;
 
 -- ===== Do permissions for guest
-GRANT INSERT ON `datasec_db_2`.`reports`
-TO 'datasec_db_2_guest'@'localhost';
+GRANT SELECT, INSERT ON `datasec_db_2`.*
+TO 'datasec_db_2_guest'@'%';
+
+-- GRANT INSERT ON `datasec_db_2`.`reports`
+-- TO 'datasec_db_2_guest'@'%';
 
 -- Hide which user has written the comment
-GRANT SELECT(`idmessages`,`question`, `answer`, `courses_idcourses`)
-ON `datasec_db_2`.`messages`
-TO 'datasec_db_2_guest'@'localhost';
+-- GRANT SELECT(`idmessages`,`question`, `answer`, `courses_idcourses`), INSERT
+-- ON `datasec_db_2`.`messages`
+-- TO 'datasec_db_2_guest'@'%';
 
-GRANT SELECT, INSERT ON `datasec_db_2`.`comments`
-TO 'datasec_db_2_guest'@'localhost';
+-- GRANT SELECT, INSERT ON `datasec_db_2`.`comments`
+-- TO 'datasec_db_2_guest'@'%';
 
-GRANT SELECT ON `datasec_db_2`.`courses`
-TO 'datasec_db_2_guest'@'localhost';
+-- GRANT SELECT, INSERT ON `datasec_db_2`.`courses`
+-- TO 'datasec_db_2_guest'@'%';
 
-GRANT SELECT ON `datasec_db_2`.`users`
-TO 'datasec_db_2_guest'@'localhost';
+-- GRANT SELECT, INSERT ON `datasec_db_2`.`users`
+-- TO 'datasec_db_2_guest'@'%';
 
-GRANT SELECT ON `datasec_db_2`.`user_type`
-TO 'datasec_db_2_guest'@'localhost';
+-- GRANT SELECT ON `datasec_db_2`.`user_type`
+-- TO 'datasec_db_2_guest'@'%';
 
 -- NOTE: Granting these could open up for steeling session tokens
---GRANT SELECT, INSERT ON `datasec_db_2`.`api_sessions`
---TO 'datasec_db_2_guest'@'localhost';
---GRANT SELECT, INSERT ON `datasec_db_2`.`api_keys`
---TO 'datasec_db_2_guest'@'localhost';
+-- GRANT SELECT, INSERT ON `datasec_db_2`.`api_sessions`
+-- TO 'datasec_db_2_guest'@'localhost';
+-- GRANT SELECT, INSERT ON `datasec_db_2`.`api_keys`
+-- TO 'datasec_db_2_guest'@'localhost';
 
 -- ===== Do permissions for student
 
@@ -168,16 +171,16 @@ TO 'datasec_db_2_guest'@'localhost';
 
 
 -- ===== Lock down the root user
-DROP USER 'root'@'%';
+-- DROP USER 'root'@'%';
 
-REVOKE ALL ON *.* FROM 'root'@'localhost';
+-- REVOKE ALL ON *.* FROM 'root'@'localhost';
 
-GRANT ALL ON mysql.*
-TO 'root'@'localhost'
-WITH GRANT OPTION;
+-- GRANT ALL ON mysql.*
+-- TO 'root'@'localhost'
+-- WITH GRANT OPTION;
 
-GRANT ALL ON sys.*
-TO 'root'@'localhost'
-WITH GRANT OPTION;
+-- GRANT ALL ON sys.*
+-- TO 'root'@'localhost'
+-- WITH GRANT OPTION;
 
 FLUSH PRIVILEGES;
