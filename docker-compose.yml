@@ -9,6 +9,8 @@ services:
       - ./app:/var/www/html
       - ./build/php/datasec.conf:/etc/apache2/sites-available/datasec.conf
       - ./build/php/php.ini:/usr/local/etc/php/php.ini
+      - ./logs:/logs
+    restart: "on-failure"
 
   #mysql:
   #  secrets:
@@ -36,6 +38,7 @@ services:
       - dbData:/var/lib/mysql
       - ./build/mysql/init:/docker-entrypoint-initdb.d
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: "on-failure"
 
 volumes:
   app:

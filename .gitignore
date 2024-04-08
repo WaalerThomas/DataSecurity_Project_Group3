@@ -9,3 +9,4 @@ app/inc/*
 !app/inc/bootstrap.php
 *_password.txt
 app/steg1/uploads/*.*
+app/vendor/
