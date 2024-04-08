@@ -31,7 +31,7 @@ if (! empty($_POST["email"])) {
         $user = new User();
         $userExists = $user->getUserByEmail($email);
         if (! $userExists) {
-            $_SESSION["errorMessage"] .= "Ingen bruker er registrert med den mailen. ";
+            $_SESSION["errorMessage"] .= "En e-post med instruksjoner for å endre passordet ditt er sendt. ";
         }
     }
 
