@@ -2,6 +2,14 @@
 session_start();
 // TODO: Check that the request is sent by someone that has access
 
+require_once __DIR__ . "/../tools/monolog.php";
+
+$systemLogger = createLogger("message-action");
+$systemLogger->pushHandler($systemFileHandler);
+
+$validationLogger = createLogger("message-action");
+$validationLogger->pushHandler($validationFileHandler);
+
 require_once __DIR__ . "/dbClasses/Message.php";
 $message = new Message();
 $_SESSION["errorMessage"] = "";
@@ -9,6 +17,8 @@ $_SESSION["errorMessage"] = "";
 // Check the CSRF token
 $token = filter_input(INPUT_POST, 'authenticity_token', FILTER_SANITIZE_STRING);
 if (! $token || $token !== $_SESSION['CSRF_token']) {
+    $validationLogger->alert("CSRFToken is invalid!");
+
     header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
     exit;
 }
@@ -20,6 +30,7 @@ if (isset($_POST['new-comment']) && isset($_POST['send_message']) && isset($_POS
     
     $messageResult = $message->createMessage($comment, $_POST['course_name'], $_SESSION['userId']);
     if (! $messageResult) {
+        $systemLogger->alert("Failed during creation of message", ["userId" => $_SESSION["userId"]]);
         $_SESSION["errorMessage"] .= "Feilet under oppretting av melding. ";
     }
 
@@ -32,6 +43,7 @@ if (isset($_POST['send_comment']) && isset($_POST['course_name']) && isset($_POS
 && !empty($_POST['answer-textbox']) && !empty($_POST['course_name'])) {
     $messageResult = $message->getAllCourseMessages($_POST['course_name']);
     if (! $messageResult) {
+        $systemLogger->alert("No messages for given subject", ["subject" => $_POST["course_name"]]);
         $_SESSION["errorMessage"] .= "Finner ingen meldinger på oppgitte emne. ";
         header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;
@@ -63,6 +75,7 @@ if (isset($_POST['send_comment']) && isset($_POST['course_name']) && isset($_POS
         if (isset($_SESSION['access_hash'])) {
             $courseResult = $course->getCourseByName($_POST['course_name']);
             if (! $courseResult) {
+                $validationLogger->alert("Invalid subject given", ["subject" => $_POST["course_name"]]);
                 $_SESSION['errorMessage'] .= "Ugyldig emnenavn oppgitt. ";
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
                 exit;
@@ -70,6 +83,7 @@ if (isset($_POST['send_comment']) && isset($_POST['course_name']) && isset($_POS
 
             $trueHash = md5($courseResult[0]['pin'] . "emneCourseSaltyBabeThingy" . $_POST['course_name']);
             if ($trueHash != $_SESSION['access_hash']) {
+                $validationLogger->alert("Hash does not match");
                 $_SESSION['errorMessage'] .= "Hashen samsvarer ikke. ";
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
                 exit;
@@ -80,6 +94,7 @@ if (isset($_POST['send_comment']) && isset($_POST['course_name']) && isset($_POS
         // It is a student or a guest user that is commenting
         $commentResult = $message->createComment($answer, $messageResult[$msg_index]['idmessages']);
         if (! $commentResult) {
+            $systemLogger->alert("Failed during creation of message");
             $_SESSION["errorMessage"] .= "Feilet under oppretting av melding. ";
         }
     }

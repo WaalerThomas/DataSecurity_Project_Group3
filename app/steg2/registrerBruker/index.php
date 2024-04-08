@@ -75,7 +75,7 @@ $_SESSION['CSRF_token'] = bin2hex(random_bytes(35));
                 <label>Skriv Passord igjen:</label>
                 <input type="password" id="rep_password" name="rep_password" required><br><br>
                 <label>Profilbilde: </label>
-                <input type="file" name="fileToUpload" id="fileToUpload"><br><br>
+                <input type="file" name="fileToUpload" id="fileToUpload" required><br><br>
                 <p>Undervisningsemne</p>
                 <label>Emnekode:</label>
                 <input type="text" id="emnekode" name="emnekode" required><br><br>

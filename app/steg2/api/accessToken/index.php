@@ -3,6 +3,10 @@ require_once __DIR__ . "/../../dbClasses/APIToken.php";
 
 header("Content-Type: application/json; charset=UTF-8");
 
+require_once __DIR__ . "/../../tools/monolog.php";
+$apiLogger = createLogger("api::accessToken::index");
+$apiLogger->pushHandler($apiFileHandler);
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // Generate API and AUTH keys
     $api_key = md5("littleAPISalt" . (string)(2418 * 2));
@@ -18,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $apiToken = new APIToken();
     $isCreated = $apiToken->createToken($api_key, $auth_key, $expDate);
     if (! $isCreated) {
+        $apiLogger->warning("Failed during creation of API token", ["apiKey" => $api_key]);
+
         $respons["errorMessage"] = "Feilet under oppretting av api token";
         $json_response = json_encode($respons);
         echo $json_response;

@@ -10,9 +10,19 @@ require_once __DIR__ . "/../dbClasses/PasswordToken.php";
 
 session_start();
 
+require_once __DIR__ . "/../../tools/monolog.php";
+
+$systemLogger = createLogger("glemtPassord::action");
+$systemLogger->pushHandler($systemFileHandler);
+
+$validationLogger = createLogger("glemtPassord::action");
+$validationLogger->pushHandler($validationFileHandler);
+
 // Check the CSRF token
 $token = filter_input(INPUT_POST, 'authenticity_token', FILTER_SANITIZE_STRING);
 if (! $token || $token !== $_SESSION['CSRF_token']) {
+    $validationLogger->alert("CSRFToken is invalid!");
+
     header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
     exit;
 }
@@ -26,6 +36,7 @@ if (! empty($_POST["email"])) {
     $email = filter_var($email, FILTER_VALIDATE_EMAIL);
 
     if (! $email) {
+        $validationLogger->alert("Email not formatted correctly!", ["email" => $email]);
         $_SESSION["errorMessage"] .= "Ugyldig e-post oppgitt. ";
     } else {
         $user = new User();
@@ -52,6 +63,8 @@ if (! empty($_POST["email"])) {
     $passToken = new PasswordToken();
     $isCreated = $passToken->createPasswordResetToken($email, $key, $expDate);
     if (! $isCreated) {
+        $systemLogger->notice("Failed during creation of token", ["email" => $email]);
+
         $_SESSION["errorMessage"] .= "Feilet under oppretting av token. ";
         header("Location: ./");
         exit;

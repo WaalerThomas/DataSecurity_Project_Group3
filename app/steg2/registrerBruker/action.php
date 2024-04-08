@@ -4,9 +4,18 @@
 
 session_start();
 
+require_once __DIR__ . "/../../tools/monolog.php";
+
+$systemLogger = createLogger("registrerBruker::action");
+$systemLogger->pushHandler($systemFileHandler);
+
+$validationLogger = createLogger("registrerBruker::action");
+$validationLogger->pushHandler($validationFileHandler);
+
 function checkProfilePictures() {
     // Check if file was uploaded
     if ($_FILES['fileToUpload']['error'] == UPLOAD_ERR_NO_FILE) {
+        $validationLogger->alert("No image uploaded");
         return array(0, null); // No file uploaded
     }
     
@@ -20,23 +29,27 @@ function checkProfilePictures() {
     // Check if image file is an actual image or fake image
     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
     if ($check == false) {
+        $validationLogger->alert("File is not an image", ["filetype" => $imageFileType]);
         $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Filen er ikke et bilde.";
         $uploadOk = 0;
     }
 
     if (file_exists($target_file)) {
         # $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Sorry, file already exists.";
+        $validationLogger->alert("File already exists", ["filename" => $target_file]);
         $uploadOk = 0;
     }
     
     // Check file size
     if ($_FILES["fileToUpload"]["size"] > 500000) {
+        $validationLogger->alert("File is too big", ["size" => $_FILES["fileToUpload"]["size"]]);
         $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Beklager, filen er for stor.";
         $uploadOk = 0;
     }
 
     // Allow certain file formats
     if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+        $validationLogger->alert("File is not an image", ["filetype" => $imageFileType]);
         $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Beklager, bare JPG, JPEG, & PNG filer er tillatt.";
         $uploadOk = 0;
     }
@@ -47,6 +60,8 @@ function checkProfilePictures() {
 // Check the CSRF token
 $token = filter_input(INPUT_POST, 'authenticity_token', FILTER_SANITIZE_STRING);
 if (! $token || $token !== $_SESSION['CSRF_token']) {
+    $validationLogger->alert("CSRFToken is invalid!");
+
     header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
     exit;
 }
@@ -57,19 +72,23 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
 
     # Check if first- and last name are valid
     if (! preg_match("/^[a-zA-Z-' æøåÆØÅ]*$/", $_POST["first_name"])) {
+        $validationLogger->notice("Forename is not passing RegEx filter", ["forename" => $_POST["first_name"]]);
         $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Fornavn kan bare inneholde bokstaver fra a-å, -, ', og mellomrom. ";
     }
     if (! preg_match("/^[a-zA-Z-' æøåÆØÅ]*$/", $_POST["last_name"])) {
+        $validationLogger->notice("Surname is not passing RegEx filter", ["surname" => $_POST["last_name"]]);
         $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Etternavn kan bare inneholde bokstaver fra a-å, -, ', og mellomrom. ";
     }
 
     # Check if valid email
     if (! filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+        $validationLogger->alert("Email not formatted correctly!");
         $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Ugyldig e-postadresse oppgitt. ";
     }
 
     # Check if the passwords don't match
     if ($_POST["password"] != $_POST["rep_password"]) {
+        $validationLogger->notice("Passwords are not the same");
         $_SESSION["errorMessage"] = $_SESSION["errorMessage"] . "Passordene er ikke like. ";
     }
 
@@ -102,6 +121,7 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
     $user = new User($ds);
     $isCreated = $user->createUser();
     if (! $isCreated) {
+        $systemLogger->alert("Failed at creation of user", ["email" => $_POST["email"]]);
         $_SESSION["errorMessage"] = "Feilet under oppretting av bruker";
         $ds->rollbackTransaction();
         header("Location: ./?type=" . $userType);
@@ -114,6 +134,7 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
         $course = new Course($ds);
         $isCourseCreated = $course->createCourse($_SESSION["userId"]);
         if (! $isCourseCreated) {
+            $systemLogger->alert("Failed at creation of subject", ["subject" => $_POST["emnekode"]]);
             $_SESSION["errorMessage"] = "Feilet under oppretting av emne";
             $ds->rollbackTransaction();
             header("Location: ./?type=" . $userType);
@@ -125,6 +146,7 @@ if (! empty($_POST["registrer_student"]) || !empty($_POST["registrer_foreleser"]
     if (! empty($profResult) && $profResult[0] == 1) {
         $target_file = $profResult[1];
         if (! move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+            $systemLogger->alert("Problems moving the image to uploads folder");
             $_SESSION["errorMessage"] .= "Beklager, det oppstod problemer ved opplasting av bildet.";
             $ds->rollbackTransaction();
             header("Location: ./?type=" . $userType);

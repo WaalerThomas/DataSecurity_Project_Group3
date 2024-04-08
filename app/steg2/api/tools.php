@@ -1,4 +1,8 @@
 <?php
+require_once __DIR__ . "/../tools/monolog.php";
+
+$apiLogger = createLogger("api::tools");
+$apiLogger->pushHandler($apiFileHandler);
 
 function getSessionId() {
     $sessionId = null;
@@ -11,6 +15,8 @@ function getSessionId() {
 
     // No session id in the header
     if ($sessionId == null) {
+        $apiLogger->notice("Session ID is missing from the header");
+
         $respons["errorMessage"] = "session_id mangler i header";
         $json_response = json_encode($respons);
         echo $json_response;
@@ -27,6 +33,8 @@ function validateSessionId($sessionId) {
     $token = new APIToken();
     $tokenResponse = $token->getSessionAccountId($sessionId);
     if (! $tokenResponse) {
+        $apiLogger->warning("Not finding a session with given ID", ["sessionID" => $sessionId]);
+
         $respons["errorMessage"] = "Finner ingen sesjon med den id'en";
         $json_response = json_encode($respons);
         echo $json_response;

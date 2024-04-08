@@ -3,6 +3,14 @@ require_once __DIR__ . "/../dbClasses/PasswordToken.php";
 
 session_start();
 
+require_once __DIR__ . "/../../tools/monolog.php";
+
+$systemLogger = createLogger("glemtPassord::reset_password");
+$systemLogger->pushHandler($systemFileHandler);
+
+$validationLogger = createLogger("glemtPassord::reset_password");
+$validationLogger->pushHandler($validationFileHandler);
+
 /**
  * Isset email key validate
  */
@@ -17,6 +25,7 @@ if (isset($_GET["key"]) && isset($_GET["email"]) && isset($_GET["action"])
     // Sanitize and validate user input
     $email = filter_var($_GET["email"], FILTER_SANITIZE_EMAIL);
     if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $validationLogger->alert("Email not formatted correctly!", ["email" => $email]);
         $error .= "Ugyldig epost oppgitt. ";
     }
     $key = filter_var($_GET["key"], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
@@ -26,6 +35,7 @@ if (isset($_GET["key"]) && isset($_GET["email"]) && isset($_GET["action"])
         $passToken = new PasswordToken();
         $tokenResult = $passToken->getEntryFromKeyAndEmail($email, $key);
         if (empty($tokenResult)) {
+            $validationLogger->alert("Link is not valid!", ["email" => $email]);
             $error .= '<h2>Ugyldig link</h2>
             <p>Linken er ugyldig/utløpt. Enten kopierte du ikke den riktige lenken
             fra e-posten, eller du har allerede brukt nøkkelen i så fall
@@ -52,6 +62,7 @@ if (isset($_GET["key"]) && isset($_GET["email"]) && isset($_GET["action"])
                 </form>
             <?php
             } else {
+                $systemLogger->alert("Link has ran out!", ["email" => $email]);
                 $error .= "<h2>Link Utløpt</h2><p>Linken er utløpt. Du prøver å bruke den utløpte lenken som kun er gyldig i 24 timer (1 dage etter forespørsel).<br /><br /></p>";
             }
         }
@@ -73,6 +84,7 @@ if (isset($_POST["email"]) && isset($_POST["action"]) && ($_POST["action"] == "u
     // Sanitize and validate user input
     $email = filter_var($_GET["email"], FILTER_SANITIZE_EMAIL);
     if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $validationLogger->alert("Email not formatted correctly!", ["email" => $email]);
         $error .= "Ugyldig epost oppgitt. ";
     }
     $pass1 = filter_var($_POST["pass1"], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
@@ -81,11 +93,14 @@ if (isset($_POST["email"]) && isset($_POST["action"]) && ($_POST["action"] == "u
     // Check the CSRF token
     $token = filter_input(INPUT_POST, 'authenticity_token', FILTER_SANITIZE_STRING);
     if (! $token || $token !== $_SESSION['CSRF_token']) {
+        $validationLogger->alert("CSRFToken is invalid!");
+
         header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
         exit;
     }
 
-    if ($pass1 != $_POST["pass2"]) {
+    if ($pass1 != $pass2) {
+        $validationLogger->notice("Passwords are not the same");
         $error .= "<p>Passordene er ikke like.<br><br></p>";
     }
 
@@ -97,6 +112,9 @@ if (isset($_POST["email"]) && isset($_POST["action"]) && ($_POST["action"] == "u
 
         $passToken = new PasswordToken();
         $passToken->removeEntry($email);
+
+        $systemLogger->info("UPDATE user password", ["email" => $email]);
+        $systemLogger->info("REMOVE password token", ["email" => $email]);
 
         echo '<div class="error"><p>Gratulerer! Passordet ditt har blitt oppdatert.</p><p><a href="../login" target="_top">Klikk her</a> for å logge inn.</p></div><br />';
     }

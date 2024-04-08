@@ -3,6 +3,10 @@ require_once __DIR__ . "/../../dbClasses/APIToken.php";
 
 header("Content-Type: application/json; charset=UTF-8");
 
+require_once __DIR__ . "/../../tools/monolog.php";
+$apiLogger = createLogger("api::accessToken::login");
+$apiLogger->pushHandler($apiFileHandler);
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['hash'])
     && !empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['hash'])) {
@@ -15,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
         if (empty($api_key_header)) {
+            $apiLogger->notice("api_key in header is missing");
+
             $respons["errorMessage"] = "api_key i header finnes ikke";
             $json_response = json_encode($respons);
             echo $json_response;
@@ -24,6 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $token = new APIToken();
         $tokenResult = $token->getTokenByAPIKey($api_key_header);
         if (! $tokenResult) {
+            $apiLogger->notice("Cannot find API key in database", ["api_key" => $api_key_header]);
+
             $respons["errorMessage"] = "Finner ikke angitt api nøkkel i databasen.";
             $json_response = json_encode($respons);
             echo $json_response;
@@ -42,6 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $hash = md5($api_key_header . $auth_key);
         if ($hash != $_POST['hash']) {
+            $apiLogger->notice("Not the correct hash given");
+            
             $respons["errorMessage"] = "Not the correct hash given";
             $json_response = json_encode($respons);
             echo $json_response;
@@ -50,9 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Check login details
         require_once __DIR__ . "/../../dbClasses/User.php";
+        $email = $_POST["email"];
+        $pass = $_POST["password"];
         $user = new User();
-        $userResult = $user->loginUser();
+        $userResult = $user->loginUser($email, $pass);
         if (! $userResult) {
+            $apiLogger->notice("Failed login attempt", ["email" => $email]);
+
             $respons["errorMessage"] = "Ugyldig Påloggingsinformasjon";
             $json_response = json_encode($respons);
             echo $json_response;

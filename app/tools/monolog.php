@@ -15,8 +15,11 @@ $formatter = new LineFormatter($formatTxt, $dateFormat, false, true);
 $validationFileHandler = new RotatingFileHandler("/logs/validation.log", 30, Level::Warning);
 $validationFileHandler->setFormatter($formatter);
 
-$systemFileHandler = new RotatingFileHandler("/logs/system.log", 30, Level::Notice);
+$systemFileHandler = new RotatingFileHandler("/logs/system.log", 30, Level::Info);
 $systemFileHandler->setFormatter($formatter);
+
+$apiFileHandler = new RotatingFileHandler("/logs/api.log", 30, Level::Notice);
+$apiFileHandler->setFormatter($formatter);
 
 function getUserIpAddr() {
     if (! empty($_SERVER["HTTP_CLIENT_IP"])) {
