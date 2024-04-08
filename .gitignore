@@ -2,6 +2,7 @@
 .idea
 *.log
 tmp/
+.env
 
 app/inc/*
 !app/inc/config.php.example
