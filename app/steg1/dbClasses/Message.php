@@ -70,7 +70,7 @@ class Message
             $answer,
             $msgId
         );
-        $messageResult = $this->ds->execute($query, $paramType, $paramArray);
+        $this->ds->execute($query, $paramType, $paramArray);
     }
 
     function getAllComments($id) {

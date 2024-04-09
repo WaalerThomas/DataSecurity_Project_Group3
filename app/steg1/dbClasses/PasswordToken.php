@@ -41,7 +41,7 @@ class PasswordToken
         $paramArray = array(
             $email
         );
-        $tokenResult = $this->ds->execute($query, $paramType, $paramArray);
+        $this->ds->execute($query, $paramType, $paramArray);
     }
 }
 ?>

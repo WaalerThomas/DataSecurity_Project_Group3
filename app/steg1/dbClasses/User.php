@@ -112,7 +112,7 @@ class User
             $hashedPassword,
             $email
         );
-        $userResult = $this->ds->execute($query, $paramType, $paramArray);
+        $this->ds->execute($query, $paramType, $paramArray);
     }
 
     function passCheck($id, $password) {

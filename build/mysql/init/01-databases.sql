@@ -138,6 +138,15 @@ CREATE USER 'datasec_db_2_guest'@'%' IDENTIFIED BY 'guestpassword';
 GRANT SELECT, INSERT ON `datasec_db_2`.*
 TO 'datasec_db_2_guest'@'%';
 
+GRANT UPDATE ON `datasec_db_2`.`messages`
+TO 'datasec_db_2_guest'@'%';
+
+GRANT UPDATE ON `datasec_db_2`.`users`
+TO 'datasec_db_2_guest'@'%';
+
+GRANT DELETE ON `datasec_db_2`.`password_reset_temp`
+TO 'datasec_db_2_guest'@'%';
+
 -- GRANT INSERT ON `datasec_db_2`.`reports`
 -- TO 'datasec_db_2_guest'@'%';
 
