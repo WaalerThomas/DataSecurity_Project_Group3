@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `comment` VARCHAR(255) NULL,
   `messages_idmessages` INT NOT NULL,
   PRIMARY KEY (`idcomments`))
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `courses`
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `courses` (
   `pin` INT NOT NULL,
   `users_iduser` INT NOT NULL,
   PRIMARY KEY (`idcourses`))
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `messages`
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `courses_idcourses` INT NOT NULL,
   `users_iduser` INT NOT NULL,
   PRIMARY KEY (`idmessages`))
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `password_reset_temp`
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `password_reset_temp` (
   `key` VARCHAR(250) NOT NULL,
   `expDate` DATETIME NOT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `api_keys`
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `api_keys` (
   `auth_key` VARCHAR(64) NOT NULL,
   `expDate` DATETIME NOT NULL,
   PRIMARY KEY (`api_key`))
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `api_sessions`
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `api_sessions` (
   `session_id` VARCHAR(64) NOT NULL,
   `users_iduser` INT NOT NULL,
   PRIMARY KEY (`session_id`))
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `reports`
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `reports` (
   `idreports` INT NOT NULL AUTO_INCREMENT,
   `messages_idmessages` INT NOT NULL,
   PRIMARY KEY (`idreports`))
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `user_type`
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `user_type` (
   `iduser_type` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`iduser_type`))
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `users`
@@ -95,7 +95,15 @@ CREATE TABLE IF NOT EXISTS `users` (
   `picture` VARCHAR(255) NULL,
   `user_type_iduser_type` INT NOT NULL,
   PRIMARY KEY (`iduser`))
-ENGINE = InnoDB;
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- -----------------------------------------------------
+-- Table `ip`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ip` (
+  `address` char(16) COLLATE utf8_bin NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP)
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Data for table `user_type`
@@ -145,6 +153,9 @@ GRANT UPDATE ON `datasec_db_2`.`users`
 TO 'datasec_db_2_guest'@'%';
 
 GRANT DELETE ON `datasec_db_2`.`password_reset_temp`
+TO 'datasec_db_2_guest'@'%';
+
+GRANT DELETE ON `datasec_db_2`.`ip`
 TO 'datasec_db_2_guest'@'%';
 
 -- GRANT INSERT ON `datasec_db_2`.`reports`

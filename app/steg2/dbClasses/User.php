@@ -103,6 +103,32 @@ class User
         return $userResult;
     }
 
+    function registerAttempt($ip) {
+        $query = "INSERT INTO `ip`(`address`, `timestamp`) VALUES(?, CURRENT_TIMESTAMP);";
+        $paramType = "s";
+        $paramArray = array(
+            $ip
+        );
+        $userResult = $this->ds->insert($query, $paramType, $paramArray);
+    }
+
+    function getAttempts($ip) {
+        $query = "SELECT COUNT(*) AS 'Count' FROM `ip` WHERE `address` LIKE ? AND `timestamp` > (now() - interval 10 minute);";
+        $paramType = "s";
+        $paramArray = array(
+            $ip
+        );
+        $userResult = $this->ds->select($query, $paramType, $paramArray);
+        return $userResult;
+    }
+
+    function cleanOldAttempts() {
+        $query = "DELETE FROM `ip` WHERE `timestamp` < NOW() - 600";
+        $paramType = "";
+        $paramArray = array();
+        $this->ds->execute($query, $paramType, $paramArray);
+    }
+
     function updateUserPassword($email, $password) {
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         $query = "UPDATE `users` SET `password` = ? WHERE `email` = ?";

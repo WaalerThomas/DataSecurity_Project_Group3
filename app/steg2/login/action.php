@@ -23,6 +23,18 @@ if (! $token || $token !== $_SESSION['CSRF_token']) {
 }
 
 if (! empty($_POST["login"])) {
+    // Register login attempt
+    $user = new User();
+    $ip = $_SERVER["REMOTE_ADDR"];
+    $user->registerAttempt($ip);
+    $attemptCount = $user->getAttempts($ip);
+    if ($attemptCount[0]['Count'] > 3) {
+        $systemLogger->alert("More than 3 failed login attempt in the past 10 minutes", ["email" => $_POST["email"]]);
+        $_SESSION["errorMessage"] = "For mange innlogging forsøk registrert. Vennligst vent";
+        header("Location: ./");
+        exit;
+    }
+    
     // Sanitize and validate user input
     $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
     if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -34,7 +46,6 @@ if (! empty($_POST["login"])) {
     }
     $pass = filter_var($_POST["password"], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
 
-    $user = new User();
     $isLoggedIn = $user->loginUser($email, $pass);
     if (! $isLoggedIn) {
         $systemLogger->notice("Failed login attempt", ["email" => $email]);
@@ -43,6 +54,9 @@ if (! empty($_POST["login"])) {
         header("Location: ./");
         exit;
     }
+
+    // User is logged inn. Cleanup all old login attempts
+    $user->cleanOldAttempts();
     header("Location: ../");
 }
 ?>
