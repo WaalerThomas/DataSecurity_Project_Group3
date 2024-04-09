@@ -16,7 +16,7 @@
 # Owner for a file/folder is going to be root, and group is going to be www-data (for apache)
 
 # Change permissions for configurations in inc/
-pushd inc/
+pushd /var/www/html/inc/
 chgrp www-data config.php config2.php
 chmod 640 config.php config2.php
 popd
@@ -28,10 +28,18 @@ chgrp www-data access.log error.log other_vhosts_access.log
 chmod 660 access.log error.log other_vhosts_access.log
 popd
 
+# Change permissions for monolog log files
+# Owner can only read, www-data can only write
+pushd /logs
+chown root ./
+chgrp www-data ./
+chmod 720 ./
+popd
+
 # Change permissions for apache configurations
 pushd /etc/apache2
 chgrp www-data -R ./
-chmod 640 -R ./
+chmod 740 -R ./
 popd
 
 # Change permissions for php configurations

@@ -28,6 +28,13 @@ if (isset($_POST['new-comment']) && isset($_POST['send_message']) && isset($_POS
 && !empty($_POST['new-comment']) && !empty($_POST['course_name'])) {    
     $comment = htmlspecialchars($_POST["new-comment"], ENT_QUOTES);
     
+    // Check that the message length is not longer than 250 characters
+    if (strlen($comment) > 250) {
+        $_SESSION["errorMessage"] .= "Maks melding lengde er 250 tegn. ";
+        header("Location: " . $_SERVER["HTTP_REFERER"]);
+        exit;
+    }
+
     $messageResult = $message->createMessage($comment, $_POST['course_name'], $_SESSION['userId']);
     if (! $messageResult) {
         $systemLogger->alert("Failed during creation of message", ["userId" => $_SESSION["userId"]]);
@@ -56,13 +63,20 @@ if (isset($_POST['send_comment']) && isset($_POST['course_name']) && isset($_POS
     $answer = htmlspecialchars($_POST["answer-textbox"], ENT_QUOTES);
     $msg_index = (int)filter_var($_POST["msg_index"], FILTER_SANITIZE_NUMBER_INT);
 
+    // Check that the message length is not longer than 250 characters
+    if (strlen($answer) > 250) {
+        $_SESSION["errorMessage"] .= "Maks melding lengde er 250 tegn. ";
+        header("Location: " . $_SERVER["HTTP_REFERER"]);
+        exit;
+    }
+
     if (isset($_SESSION['userId'])) {
         $courseResult = $course->getCourseByName($_POST['course_name']);
 
         // Check if it is the lecturer that is answering
         if ($messageResult[0]['courses_idcourses'] == $courseResult[0]['idcourses'] && $courseResult[0]['users_iduser'] == $_SESSION['userId']) {
             $msgId = $messageResult[$msg_index]['idmessages'];
-            $msgResult = $message->addAnswer($msgId, $answer);
+            $message->addAnswer($msgId, $answer);
             
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit;
