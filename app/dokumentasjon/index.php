@@ -37,13 +37,14 @@
 </p>
 
 <h2>Steg 2</h2>
+<a href="DataSecurity_Project_Group3.zip" download><h3>Last ned Kildekode</h3></a>
 <p>DISCLAMER: Vi har utført mesteparten av oppgaven på engelsk. Så diagrammene være kommer til å være på engelsk.</p>
 <h3>Risk Management Framework</h3>
 <p>Vi startet med å lage en Risk-Matrix. Se bort ifra teksten i de fargede rutene.</p>
 <img src="RMF_matrix.png" alt="img_RMF_matrix">
 
 <p>Deretter skrev vi en liten liste over de delene vi valgte å fokusere på.</p>
-<img src="" alt="img_RMF_list">
+<img src="RMF_list.png" alt="img_RMF_list">
 
 <p>Etter dette diskuterte vi sammen hvor å plassere de forskjellige delene utifra sannsynlighet og konsekvense. Plasseringene vi endte opp med kan bli sett i RMF-matrix bildet over.</p>
 
