@@ -40,7 +40,7 @@ if (isset($_GET["key"]) && isset($_GET["email"]) && isset($_GET["action"])
             <p>Linken er ugyldig/utløpt. Enten kopierte du ikke den riktige lenken
             fra e-posten, eller du har allerede brukt nøkkelen i så fall
             så er den deaktivert.</p>
-            <p><a href="./" target="_top">
+            <p><a href="./" rel="noopener noreferrer" target="_top">
             Klikk her</a> for å resette passord.</p>';
         } else {
             $expDate = $tokenResult[0]["expDate"];
@@ -116,7 +116,7 @@ if (isset($_POST["email"]) && isset($_POST["action"]) && ($_POST["action"] == "u
         $systemLogger->info("UPDATE user password", ["email" => $email]);
         $systemLogger->info("REMOVE password token", ["email" => $email]);
 
-        echo '<div class="error"><p>Gratulerer! Passordet ditt har blitt oppdatert.</p><p><a href="../login" target="_top">Klikk her</a> for å logge inn.</p></div><br />';
+        echo '<div class="error"><p>Gratulerer! Passordet ditt har blitt oppdatert.</p><p><a href="../login" rel="noopener noreferrer" target="_top">Klikk her</a> for å logge inn.</p></div><br />';
     }
 }
 ?>

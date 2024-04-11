@@ -35,7 +35,7 @@ $_SESSION['CSRF_token'] = bin2hex(random_bytes(35));
 
     <br>
 
-    <a href="../glemtPassord/" target="_top">Glemt passord?</a>
+    <a href="../glemtPassord/" rel="noopener noreferrer" target="_top">Glemt passord?</a>
 </div>
 
 </body>

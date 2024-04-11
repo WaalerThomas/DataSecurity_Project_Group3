@@ -47,5 +47,5 @@ if (! empty($_POST["change_pass"])) {
     $systemLogger->info("UPDATE user password", ["userId" => $_SESSION["userId"]]);
 }
 
-echo '<div class="error"><p>Gratulerer! Passordet ditt har blitt oppdatert.</p><p><a href="../" target="_top">Klikk her</a> for å gå tilbake til hovedsiden.</p></div><br />';
+echo '<div class="error"><p>Gratulerer! Passordet ditt har blitt oppdatert.</p><p><a href="../" rel="noopener noreferrer" target="_top">Klikk her</a> for å gå tilbake til hovedsiden.</p></div><br />';
 ?>

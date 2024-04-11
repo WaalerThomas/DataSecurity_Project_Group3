@@ -34,6 +34,6 @@ if ($userTypeResult[0]["name"] != "admin") {
 </head>
 <body>
     <h1>Admin Panel</h1>
-    <a href="../logout.php" target="_top">Logg ut</a>
+    <a href="../logout.php" rel="noopener noreferrer" target="_top">Logg ut</a>
 </body>
 </html>

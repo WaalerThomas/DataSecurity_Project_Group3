@@ -56,6 +56,7 @@ class User
     
     function loginUser($email, $password) {
         $userResult = $this->getUserByEmail($email);
+        $password = $password . "JEH5hCxk0Ay6hDGhliVS2mqysazpJQ5v"; // Add the pepper
         $isLoginPassword = 0;
         if (! empty($userResult)) {
             $hashedPassword = $userResult[0]["password"];
@@ -77,7 +78,7 @@ class User
             return;
         }
 
-        $hashedPassword = password_hash($_POST["password"], PASSWORD_BCRYPT);
+        $hashedPassword = password_hash($_POST["password"] . "JEH5hCxk0Ay6hDGhliVS2mqysazpJQ5v", PASSWORD_BCRYPT);
         $userType = null;
         $picture = null;
         if (! empty($_POST["registrer_student"])) {

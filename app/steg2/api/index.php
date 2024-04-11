@@ -73,7 +73,7 @@ For å kunne bruke API'et og sende forespørseler så trenger man en sesjon id s
             <li>API nøkkel: <b>c3b93f66ea2df47b9f5779cdf99929c111bf2b09d0</b></li>
             <li>Auth nøkkel: <b>ee7bad332b90068380cceb590501367e5e69e2a6ed</b></li>
             <li>md5(<b>c3b93f66ea2df47b9f5779cdf99929c111bf2b09d0ee7bad332b90068380cceb590501367e5e69e2a6ed</b>)</li>
-            <li>For å hashe så kan denne nettsiden brukes: <a href="https://www.md5hashgenerator.com/" target="_top">https://www.md5hashgenerator.com/</a></li>
+            <li>For å hashe så kan denne nettsiden brukes: <a href="https://www.md5hashgenerator.com/" rel="noopener noreferrer" target="_top">https://www.md5hashgenerator.com/</a></li>
         </ul>
     </li>
     <li>Login og knytt API nøkkel sammen med en bruker ved å bruke /accessToken/login.php

@@ -83,7 +83,7 @@ if (! empty($_POST["email"])) {
         <div class="emailbox">
             <p>Venligst klikk på følgende link for å resette ditt passord.</p>
             <br>
-            <p><a <?php echo 'href="./reset_password.php?key='.$key.'&email='.$email.'&action=reset"'; ?> target="_blank">Klikk for å resette passord</a></p>
+            <p><a <?php echo 'href="./reset_password.php?key='.$key.'&email='.$email.'&action=reset"'; ?> rel="noopener noreferrer" target="_blank">Klikk for å resette passord</a></p>
             <br>
             <p>Husk å kopiere hele lenken til nettleseren din. Linken vil utløpe etter 1 dag av sikkerhetsmessig grunner.</p>
             <p>Hvis du ikke ba om denne e-posten med glemt passord, ingen handling er nødvendig, vil ikke passordet ditt tilbakestilles. Det kan imidlertid være lurt å logge på kontoen din og endre sikkerhetspassordet slik noen kanskje har gjettet det.</p>
