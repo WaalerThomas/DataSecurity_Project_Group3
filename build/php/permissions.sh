@@ -30,11 +30,9 @@ popd
 
 # Change permissions for monolog log files
 # Owner can only read, www-data can only write
-pushd /logs
-chown root ./
-chgrp www-data ./
-chmod 720 ./
-popd
+chown root /logs
+chgrp www-data /logs
+chmod 720 /logs
 
 # Change permissions for apache configurations
 pushd /etc/apache2
