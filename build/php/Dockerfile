@@ -1,7 +1,7 @@
 FROM php:8.1-apache
 
 RUN apt-get update && docker-php-ext-install mysqli pdo pdo_mysql
-RUN apt-get install git -y
+RUN apt-get install git nano -y
 
 # Enable mod_rewrite and mod_headers
 RUN a2enmod rewrite

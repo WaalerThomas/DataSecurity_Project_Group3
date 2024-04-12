@@ -134,7 +134,7 @@ COMMIT;
 -- TODO: Make better passwords for the users
 -- TODO: Don't save passwords in this file!!!!!!!
 -- CREATE USER 'datasec_db_2_master'@'localhost' IDENTIFIED BY 'master';
-CREATE USER 'datasec_db_2_guest'@'%' IDENTIFIED BY 'guestpassword';
+CREATE USER 'datasec_db_2_guest'@'%' IDENTIFIED BY 'ZK2fcC6oKSHoPFq4';
 -- CREATE USER 'datasec_db_2_student'@'localhost' IDENTIFIED BY 'student';
 -- CREATE USER 'datasec_db_2_lecturer'@'localhost' IDENTIFIED BY 'lecturer';
 
